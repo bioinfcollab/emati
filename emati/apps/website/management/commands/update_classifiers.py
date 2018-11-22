@@ -25,7 +25,7 @@ class Command(BaseCommand):
 
 
     def add_arguments(self, parser):
-        parser.add_argument('user_ids', type=int, nargs='+', help="")
+        parser.add_argument('user_ids', type=int, nargs='*', help="")
 
 
     def _get_user_list(self, **options):
@@ -41,11 +41,10 @@ class Command(BaseCommand):
         
         users = self._get_user_list(**options)
         if not users:
-            self.stderr.write("No users were specified.")
+            logger.warning("No users to work with.")
             return
         
         for u in users:
-
             if self._retraining_permitted(u):
                 logger.info(
                     "Retraining classifier for user {} ...".format(u.pk)

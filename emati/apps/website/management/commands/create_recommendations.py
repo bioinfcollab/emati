@@ -94,7 +94,7 @@ class Command(BaseCommand):
 
             articles = self._get_article_list(user=u, **options)
             if not articles:
-                self.stderr.write(
+                logger.warning(
                     "Skipping user {}. No articles "
                     "found for classification.".format(u.pk)
                 )
