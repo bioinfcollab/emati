@@ -1,0 +1,67 @@
+{% extends "website/base.html" %}
+
+{% load account socialaccount %}
+{% load static %}
+
+{% comment %}
+The first page visitors see when they are not logged in.
+{% endcomment %}
+
+{% block css %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static '/website/css/welcome.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static '/website/css/login.css' %}" />
+{% endblock css %}
+
+{% block header %}{% endblock %}
+
+
+{% block content %}
+
+<div class="content-box welcome-box vertical-content">
+    <div class="horizontal-content">
+        <div class="document-image">        
+            <img src="{% static 'website/media/doc.png' %}" alt="">
+        </div>
+
+        <div class="welcome-sidebar vertical-content">
+            <div class="page-title">
+                <h1>Emati</h1>
+            </div>
+
+            <div class="page-subtitle">
+                The paper recommender system
+            </div>
+
+            <div>
+                <p>Scientific literature is growing rapidly. Thousands of
+                papers are published each week. This makes it harder and
+                harder to keep track of the newest relevant publications.
+                Emati learns about your preferred topics and will present the
+                best fitting papers on a weekly basis.</p>
+            </div>
+
+            <div class="horizontal-content welcome-buttons">
+                <a class="button" href="{% url 'account_login' %}"><i class="fas fa-sign-in-alt"></i> Log in</a>
+                <a class="button" href="{% url 'account_signup' %}"><i class="fas fa-user-plus"></i> New account</a>
+            </div>
+
+        </div>
+    </div>
+    <div class="welcome-footer horizontal-content">
+        <div>
+            <a href="{% url 'about' %}">INFO</a>
+        </div>
+        <div>
+            <a href="{% url 'terms_and_conditions' %}">TERMS</a>
+        </div>
+        <div>
+            <a href="http://www.biotec.tu-dresden.de/imprint.html">IMPRINT</a>
+        </div>
+        <div>
+            <a href="mailto:{{ contact_email }}">CONTACT</a>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

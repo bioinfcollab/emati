@@ -1,0 +1,41 @@
+{% load page_extras %}
+
+{% comment %}
+The visual representation of a single file uploaded by the user.
+This snippet is included once for each file.
+{% endcomment %}
+
+<div class="upload-list__file">
+
+    <div>
+        <div class="upload-list__file__icon">
+            <i class="far fa-file"></i>
+        </div>
+    </div>
+
+    <div class="upload-list__file__spacer"></div>
+        
+    <div>
+        <div class="upload-list__file__name">
+            <a href="/download_file?file={{ filename }}">{{ filename | basename }}</a>
+        </div>
+        <div class="upload-list__file__size">
+            {{ filesize | human_readable }}
+        </div>
+    </div>
+
+    <div class="upload-list__file__spacer"></div>
+
+    <div>
+        <div class="upload-list__file__delete-button">
+            <div class="label-delete">
+                <i class="far fa-trash-alt"></i>
+            </div>
+            <div class="label-undo">
+                <i class="fas fa-undo"></i>
+            </div>
+            <input type="checkbox" name="removefile" value="{{ filename }}" class="deletion-checkbox">
+        </div>
+    </div>
+
+</div>

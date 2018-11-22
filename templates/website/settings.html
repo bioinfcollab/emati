@@ -1,0 +1,91 @@
+{% extends "website/base.html" %}
+{% load static %}
+{% load page_extras %}
+
+
+{% block script %}
+<script src="{% static 'website/js/settings.js' %}"></script>
+{% endblock script %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static '/website/css/settings.css' %}" />
+{% endblock css %}
+
+{% block content %}
+<div class="content-box">
+    
+    <form id="settings-form" enctype="multipart/form-data" method="POST">
+        {% csrf_token %}
+        <div>
+            <h1>Settings</h1>
+        </div>
+
+        <div class="settings-item">
+            <div class="settings-item-checkbox">
+                {{ settings_form.newsletter }}
+            </div>
+            <div class="settings-item-label">
+                <div class="settings-item-label-title">Receive newsletter</div>
+                <div class="settings-item-label-description">Last week's most interesting papers sent to you every monday morning.</div>
+            </div>
+        </div>
+
+        <div id="upload-list">
+            <div id="upload-list__title">
+                Upload reference files
+                <div class="tooltip">
+                    <i class="far fa-question-circle"></i>
+                    <div class="tooltip-text">
+                        Improve your recommendations by uploading your
+                        reference files. We can learn about your preferred
+                        topics by seeing which papers you cited in the past.
+                        Currently supported formats include: BibTeX (.bib),
+                        RIS (.ris), Endnote XML (.xml).
+                    </div>
+                </div>
+            </div>
+            <div id="upload-list__content">
+                {% for upload in uploaded_files %}
+                {% include "website/snippets/upload.html" with filesize=upload.file.size filename=upload.file.name %}
+                {% endfor %}
+                {% include "website/snippets/upload_button.html" %}
+            </div>
+        </div>
+
+        <div class="settings-buttons">
+            <button id="settings-buttons__save" type="submit" class="button button-disabled">Save</button>
+            <a href="{{ request.path }}" class="button button-disabled button-light">Cancel</a>
+            <div class="loading-icon">
+                {% include "website/snippets/loading_icon_horizontal.html" %}
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<div class="content-box">
+    <h1>Account options</h1>
+    <p>
+        <a href="{% url 'account_logout' %}" class="bold-link">
+            {% comment %} <i class="fas fa-sign-out-alt"></i> {% endcomment %}
+            Logout
+        </a>
+    </p>
+    <hr>
+    <p>
+        <a href="{% url 'account_change_password' %}" class="bold-link">Change password</a>
+    </p>
+    <p>
+        <a href="{% url 'account_email' %}" class="bold-link">Change E-Mail</a>
+    </p>
+    <hr>
+    <p>
+        <a href="{% url 'account_reset' %}" class="bold-link">Reset account</a>
+    </p>
+    <p>
+        <a href="{% url 'account_delete' %}" class="bold-link">Delete account</a>
+    </p>
+</div>
+
+
+{% endblock content %}

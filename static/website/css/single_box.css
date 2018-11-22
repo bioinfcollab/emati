@@ -1,0 +1,36 @@
+.content-wrapper {
+    width: 0;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+form p {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-weight: bold;
+    font-size: 10px;
+    display: block;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.content-box {
+    flex: 0 0;
+}
+
+h1 {
+    white-space: nowrap;
+}
+
+p {
+    white-space: normal;
+}

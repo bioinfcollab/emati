@@ -1,0 +1,57 @@
+{% extends "website/base.html" %}
+{% load static %}
+
+
+{% comment %}
+The page where you accept our terms and conditions.
+This page is shown to any user that is logged in but
+hasn't agreed to our terms yet.
+{% endcomment %}
+
+
+{% block script %}
+<script src="{% static 'website/js/terms_agreement.js' %}"></script>
+{% endblock script %}
+
+{% comment %}
+Overwrite with empty blocks to hide searchbar and navbar
+{% endcomment %}
+{% block searchbar %}{% endblock %}
+{% block navbar %}{% endblock %}
+
+
+{% block content %}
+
+<div class="content-box">
+    <h1>Welcome to Emati</h1>
+
+    <p>Data protection is a high priority for Emati. Processing of personal
+    data shall always be in line with the General Data Protection Regulation
+    (GDPR).</p>
+
+    <p>Emati is a personalized service, which screens scientific articles to
+    recommend those, which match the user's interest.</p>
+
+    <p>To deliver and improve this service, Emati may store personal
+    information such as the user's email address, uploaded files, time stamps,
+    log in events, selected articles, information derived from the user's IP
+    address (such as country or institution), and other information resulting
+    from the user's interaction with the service. The collected data is only
+    used for internal purposes and is not sold to third parties.</p>
+
+    <form action="{% url 'terms_agree' %}" method="POST">
+        {% csrf_token %}
+
+        <p>
+            <input type="checkbox" name="consent" id="consent-checkbox">
+            <label for="consent">I understand and accept the above data protection information, as well as the <a href="{% url 'terms_and_conditions' %}" target="_blank">Terms and Conditions</a></label>
+        </p>
+        <p>
+            <button class="button" id="consent-button" type="submit" disabled>
+                Continue
+            </button>
+        </p>
+    </form>
+</div>
+
+{% endblock content %}

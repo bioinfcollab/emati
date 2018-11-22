@@ -1,0 +1,161 @@
+{% load static %}
+{% load page_extras %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Emati Dashboard</title>
+
+    <link rel="stylesheet" type="text/css" href="{% static '/dashboard/css/main.css' %}" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'dashboard/js/leaflet/leaflet.css' %}" />
+    <link rel="stylesheet" href="{% static 'dashboard/js/leaflet.markercluster-1.4.1/MarkerCluster.css' %}" />
+    <link rel="stylesheet" href="{% static 'dashboard/js/leaflet.markercluster-1.4.1/MarkerCluster.Default.css' %}" />
+    {% block css %}
+    {% endblock css %}
+
+    <script src="{% static 'website/js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'dashboard/js/moment.js' %}"></script>
+    <script src="{% static 'dashboard/js/Chart.js' %}"></script>
+    <script src="{% static 'dashboard/js/leaflet/leaflet.js' %}"></script>
+    <script src="{% static 'dashboard/js/leaflet.markercluster-1.4.1/leaflet.markercluster.js' %}"></script>
+    <script src="{% static 'dashboard/js/main.js' %}"></script>
+    {% block script %}
+    {% endblock script %}
+</head>
+
+<body>
+    <div class="header">
+        <div class="header-title-container">
+            <a href="{% url 'dashboard:main' %}">
+                <div class="header-title">Emati</div>
+            </a>
+            <a href="{% url 'dashboard:main' %}">
+                <div class="header-subtitle">
+                    <i class="fas fa-code"></i>
+                    dashboard
+                </div>
+            </a>
+        </div>
+
+        <div class="user-display">
+            {{ user.email }}
+        </div>
+
+        <div class="header-links">
+            <a href="{% url 'welcome' %}">View Site</a>
+            <a href="{% url 'admin:index' %}">Django Admin</a>
+            <a href="{{ project_repository }}">Project Repository</a>
+        </div>
+    </div>
+    <div class="content-wrapper">
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">
+                    <div class="message__icon">
+                        {% if message.tags == 'message-debug' %}
+                            <i class="fas fa-code"></i>                        
+                        {% elif message.tags == 'message-info' %}
+                            <i class="fas fa-info"></i>
+                        {% elif message.tags == 'message-success' %}
+                            <i class="fas fa-check"></i>
+                        {% elif message.tags == 'message-warning' %}
+                            <i class="fas fa-exclamation-triangle"></i>
+                        {% elif message.tags == 'message-error' %}
+                            <i class="fas fa-exclamation-triangle"></i>
+                        {% endif %}
+                    </div>
+                    <div class="message__text">
+                        {{ message }}
+                    </div>
+                    <div class="message__close-button">
+                        <i class="fas fa-times"></i>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <h1>Current database state</h1>
+        <div class="monitor">
+            <div class="monitor-item">
+                <div class="monitor-item__label">Users:</div>
+                <div class="monitor-item__value">{{ num_users }}</div>
+            </div>
+            <div class="monitor-item">
+                <div class="monitor-item__label">Articles:</div>
+                <div class="monitor-item__value">{{ num_articles }}</div>
+            </div>
+            <div class="monitor-item">
+                <div class="monitor-item__label">Recommendations:</div>
+                <div class="monitor-item__value">{{ num_recommendations }}</div>
+            </div>
+            <div class="monitor-item">
+                <div class="monitor-item__label">Uploaded files:</div>
+                <div class="monitor-item__value">{{ num_uploads }}</div>
+            </div>
+        </div>
+
+        <h1>Statistics</h1>
+        <div class="loading-icon">
+            {% include "dashboard/loading-icon.html" %}
+        </div>
+        <div class="chart">
+            {% comment %} registered/verified users {% endcomment %}
+            <canvas id="usersChart"></canvas>
+            <div class="explanation">Registered users are all those present in
+            the database. Verified users are only those with a verified email
+            address.</div>
+        </div>
+        <div class="chart">
+            {% comment %} active/returning users {% endcomment %}
+            <canvas id="activeUsersChart"></canvas>
+            <div class="explanation">Active users are those that interacted at
+            least once with the website during that week. Returning users are
+            those that visited on two consecutive weeks.</div>
+        </div>
+
+        <div class="chart">
+            <canvas id="signupDistributionChart"></canvas>
+            <div class="custom-label">
+            </div>
+            <div class="explanation">Current distribution of signup methods</div>
+        </div>
+
+        <div class="chart">
+            <div id="worldmap"></div>
+            <div class="explanation">User location at time of registration</div>
+        </div>
+
+        <div class="chart">
+            {% comment %} num Articles, num Recommendations {% endcomment %}
+            <canvas id="articlesChart"></canvas>
+            <div class="explanation">Total numbers of articles and recommendations stored in the database.</div>
+        </div>
+
+        <div class="chart">
+            {% comment %} likes/dislikes/clicks {% endcomment %}
+            <canvas id="interactionsChart"></canvas>
+            <div class="explanation">The total number of like/dislike/click
+            events. Multiple clicks on the same article count as separate
+            events. The same goes for likes and dislikes.</div>
+        </div>
+
+        <div class="chart">
+            {% comment %} only clicked, clicked+liked, clicked+disliked {% endcomment %}
+            <canvas id="clickedInteractionsChart"></canvas>
+            <div class="explanation">Comparing the number of recommendations
+            that were clicked but neither liked nor disliked versus those that
+            were both clicked and liked/disliked.</div>
+        </div>
+
+        <div class="chart">
+            {% comment %} search requests, users that searched {% endcomment %}
+            <canvas id="searchRequestsChart"></canvas>
+            <div class="explanation">The number of search requests compared to
+            the number of users that submitted these search requests.</div>
+        </div>
+    </div>
+</body>
+</html>

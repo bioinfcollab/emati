@@ -1,0 +1,11 @@
+<h1>Hello {{ user.email }},</h1>
+
+here are your top-ranked articles from last week:
+
+{% for recommendation in recommendations %}<a href="{{ recommendation.article.url_fulltext }}" ping="{% url 'log_click' recommendation.article.pk %}">{{ recommendation.article.title }}</a>
+{% endfor %}
+<p>Check out <a href="{{ current_site.domain }}">{{ current_site.name }}</a>
+for more articles.</p>
+
+<p>You can unsubscribe from this newsletter via the <a href="{% url 'settings'
+%}">settings menu</a>.</p>

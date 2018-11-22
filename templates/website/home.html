@@ -1,0 +1,40 @@
+{% extends "website/base.html" %}
+{% load account socialaccount %}
+{% load page_extras static %}
+
+{% comment %}
+The main page after loggin in.
+Shows the list of recommendations.
+{% endcomment %}
+
+
+{% block script %}
+    <script src="{% static 'website/js/logging.js' %}"></script>
+    <script src="{% static 'website/js/loadmore.js' %}"></script>
+{% endblock script %}
+
+
+{% block css %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static '/website/css/home.css' %}" />
+{% endblock css %}
+
+{% block content %}
+
+    <div class="content-box">
+        <div class="result-info-box">
+            <div class="result-info-box-left">
+                <div class="week-selector">
+                    <a href="{{ week_request_prev }}" title="show previous week"><i class="fas fa-angle-left"></i></a>
+                    <span title="{{ week_range_pretty }}">WEEK {{ week_nr }} </span>
+                    <a href="{{ week_request_next }}" title="show next week"><i class="fas fa-angle-right"></i></a>
+                </div>
+            </div>
+            <div class="result-info-box-right">
+                {{ week_range_pretty }}
+            </div>
+        </div>
+        {% include 'website/snippets/recommendations.html' %}
+    </div>
+        
+{% endblock content %}

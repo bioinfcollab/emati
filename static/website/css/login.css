@@ -1,0 +1,89 @@
+.content-wrapper {
+    align-items: center;
+}
+
+.header {
+    margin-bottom: 20px;
+}
+
+.social-logins__item {
+    display: block;
+    margin: 5px 0;
+    width: 250px;
+}
+
+.google-button, .facebook-button {
+    color: #eee;
+    font-weight: bold;
+    width: 100%;
+}
+
+.google-button {
+    background-color: #dc4e41;
+}
+
+.facebook-button {
+    background-color: #4d6ab0;
+}
+
+.google-button:hover {
+    background-color: #ec2e21;
+    color: #fff;
+}
+
+.facebook-button:hover {
+    background-color: #3b5998;
+    color: #fff;
+}
+
+#login-email, #login-password {
+    box-sizing: border-box;
+    width: 250px;
+}
+
+.separator-box {
+    position: relative;
+    margin: 20px 0;
+    font-size: 10px;
+    line-height: 10px;
+    height: 10px;
+}
+
+.separator-box__separator {
+    border: 1px solid #ccc;
+    position: relative;
+    top: 48%;
+}
+
+.separator-box__or {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: auto auto;
+    color: #aaa;
+    /* font-size: 12px; */
+    background-color: #fff;
+    padding: 0 5px;
+}
+
+#submit-button {
+    width: 250px;
+}
+
+.footer-box {
+    display: flex;
+    margin: 10px 0 0 0;
+    font-size: 10px;
+    justify-content: space-between;
+}
+
+.footer-box__item a {
+    text-decoration: none;
+    font-weight: bold;
+}
+
+
+.footer-box__item a:hover {
+    text-decoration: underline;
+}

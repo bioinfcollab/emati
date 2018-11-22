@@ -1,0 +1,196 @@
+
+.settings-buttons {
+    margin-top: 20px;
+}
+
+.settings-item {
+    margin: 20px 0;
+    display: flex;
+}
+
+.settings-item-checkbox {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin: 0 10px;
+}
+
+.settings-item-label {
+    display: inline-block;
+}
+
+.settings-item-label-title {
+
+}
+
+.settings-item-label-description {
+    font-size: 12px;
+    color: #888;
+}
+
+#upload-list {
+    border: 1px solid lightgray; 
+    border-radius: 3px;
+}
+
+#upload-list__title {
+    padding: 10px;
+    border-bottom: 1px solid lightgray;
+    background-color: #eef;
+}
+
+#upload-list__content {
+    padding: 5px;
+    display: flex;
+    flex-wrap: wrap; 
+}
+
+.upload-list__file, #upload-list__new-file {
+    margin: 5px; 
+    padding: 10px;
+    border: 1px solid lightgray; 
+    display: flex; 
+    border-radius: 3px;
+    flex: 0 1 auto;
+}
+
+.upload-list__file > * {
+    display: flex;
+    flex-direction: column;
+}
+
+.upload-list__file__name{
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+#upload-list__new-file__label {
+    letter-spacing: 1px;
+    font-size: 10px;
+}
+
+.upload-list__file__name > a {
+    text-decoration: none;
+    color: #444;
+}
+
+.upload-list__file__name > a:hover {
+    text-decoration: underline;
+}
+
+.upload-list__file__buttons {
+    align-items: center;
+}
+
+.upload-list__file__size {
+    font-size: 10px;
+    color: #888;
+    vertical-align: middle;
+}
+
+.upload-list__file__spacer {
+    width: 10px;
+}
+
+.upload-list__file__delete-button {
+    display: flex;
+}
+
+.upload-list__file__delete-button .fa-trash-alt {
+    font-size: 16px;
+}
+
+.upload-list__file__delete-button .fa-undo {
+    font-size: 14px;
+}
+
+.upload-list__file__delete-button .fa-trash-alt:hover {
+    color: #f00;
+}
+
+.upload-list__file__delete-button .fa-undo:hover {
+    color: #000;
+}
+
+.upload-list__file__icon {
+    font-size: 30px;
+}
+
+.upload-list__file:hover, #upload-list__new-file:hover {
+    background-color: #eef;
+}
+
+#upload-list__new-file:active {
+    background-color: #ccf;
+}
+
+#upload-list__new-file {
+    padding: 6px;
+    display: flex;
+    align-items: center;
+}
+
+#upload-list__new-file__icon {
+    padding: 5px;
+    margin: 0;
+    font-size: 16px;
+    color: #6c6;
+}
+
+#upload-list__new-file {
+    cursor: pointer;
+}
+
+#upload-list__new-file__label {
+    padding: 5px;
+    margin: 0;
+}
+
+.to-be-deleted .upload-list__file__icon {
+    color: #f00;
+}
+
+.to-be-deleted {
+    border-color: #f88;
+    background-color: #fee;
+}
+
+.to-be-deleted:hover {
+    background-color: #fdd;
+}
+
+.to-be-uploaded {
+    background-color: #efe;
+    border-color: #8c8;
+}
+
+.to-be-uploaded:hover {
+    background-color: #dfd;
+}
+
+.to-be-uploaded .upload-list__file__icon {
+    color: #8d8;
+}
+
+.deletion-checkbox {
+    display: none;
+}
+
+.label-undo {
+    display: none;
+    cursor: pointer;
+}
+
+.label-delete {
+    cursor: pointer;
+}
+
+.label-new {
+    color: #4d4;
+    font-size: 12px;
+}
+
+.loading-icon {
+    display: none;
+    margin: 0 auto;
+}

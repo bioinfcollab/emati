@@ -1,0 +1,90 @@
+{% load static %}
+
+{% comment %}
+The base skeleton for HTML pages.
+{% endcomment %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Emati</title>
+
+    <link rel="stylesheet" type="text/css" href="{% static '/website/css/base.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static '/website/css/searchbar.css' %}" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+    {% block css %}
+    {% endblock css %}
+
+    <script src="{% static 'website/js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'website/js/js.cookie.js' %}"></script>
+    <script src="{% static 'website/js/ajax_setup.js' %}"></script>
+    <script src="{% static 'website/js/messages.js' %}"></script>
+    {% include 'website/snippets/cookie_consent.html' %}
+    {% block script %}
+    {% endblock script %}
+</head>
+
+<body>
+    {% block header %}
+    <div class="page-header">
+        <div class="page-title">
+            <a href="{% url 'welcome' %}">Emati</a>
+        </div>
+
+        {% block searchbar %}
+            {% if user.is_authenticated and user.profile.terms_consent %}
+                {% include 'website/snippets/searchbar.html' %}
+            {% endif %}
+        {% endblock searchbar %}
+
+        {% block navbar %}
+            {% if user.is_authenticated and user.profile.terms_consent %}
+                {% include 'website/snippets/navbar.html' %}
+            {% endif %}
+        {% endblock navbar %}
+    </div>
+    {% endblock header %}
+
+    {% comment %}
+    Wrap it in an extra block in case somebody ever 
+    wants to overwrite the default content-wrapper
+    {% endcomment %}
+    {% block body %}
+    
+    {% if messages %}
+        <div class="message-container">
+
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">
+                    <div class="message__icon">
+                        {% if message.tags == 'message-debug' %}
+                            <i class="fas fa-code"></i>                        
+                        {% elif message.tags == 'message-info' %}
+                            <i class="fas fa-info"></i>
+                        {% elif message.tags == 'message-success' %}
+                            <i class="fas fa-check"></i>
+                        {% elif message.tags == 'message-warning' %}
+                            <i class="fas fa-exclamation-triangle"></i>
+                        {% elif message.tags == 'message-error' %}
+                            <i class="fas fa-exclamation-triangle"></i>
+                        {% endif %}
+                    </div>
+                    <div class="message__text">
+                        {{ message }}
+                    </div>
+                    <div class="message__close-button">
+                        <i class="fas fa-times"></i>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="content-wrapper">
+        {% block content %}
+        {% endblock content %}
+    </div>
+    {% endblock body %}
+</body>
+</html>

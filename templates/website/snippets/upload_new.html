@@ -1,0 +1,41 @@
+{% load page_extras %}
+
+{% comment %}
+Visual representation of a new file that is going to be uploaded once the 
+"Save settings" button is pressed.
+{% endcomment %}
+
+<div class="upload-list__file to-be-uploaded">
+
+    <div>
+        <div class="upload-list__file__icon">
+            <i class="fas fa-file-upload"></i>
+        </div>
+    </div>
+
+    <div class="upload-list__file__spacer"></div>
+        
+    <div>
+        <div class="upload-list__file__name">
+            {{ filename | basename }}
+        </div>
+        <div class="upload-list__file__size">
+            {{ filesize | human_readable }}
+        </div>
+    </div>
+
+    <div class="upload-list__file__spacer"></div>
+
+    <div>
+        <div class="upload-list__file__delete-button">
+            <div class="label-delete">
+                <i class="far fa-trash-alt"></i>
+            </div>
+            <div class="label-undo">
+                <i class="fas fa-undo"></i>
+            </div>
+            <input type="checkbox" name="removefile" value="{{ filename }}" class="deletion-checkbox">
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,26 @@
+{% extends "website/base.html" %}
+{% load static %}
+
+{% block css %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static '/website/css/single_box.css' %}" />
+{% endblock css %}
+
+{% block searchbar %}{% endblock %}
+
+{% block content %}
+<div class="content-box">
+    <h1>Delete your account</h1>
+    
+    <form method="POST" action="{% url 'account_delete' %}">
+        {% csrf_token %}
+        <p>Are you sure you want to delete your account?</p>
+        <p>Everything belonging to your account will be deleted, including
+        your login data. This action cannot be undone.</p>
+        <div class="button-container">
+            <button type="submit" name="action">Delete account</button>
+            <a href="{% url 'settings' %}" class="button button-light">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock content %}

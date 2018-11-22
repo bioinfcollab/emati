@@ -1,0 +1,17 @@
+# python cache
+*.py[oc]
+__pycache__/
+
+# IDE files
+.idea/
+.vscode/
+*.sublime-*
+
+# Ignore the settings files
+emati/settings/*.py
+
+# Ignore user classifiers and uploads
+media/
+
+# Ignore log files
+logs/

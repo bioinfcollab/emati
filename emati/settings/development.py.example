@@ -1,0 +1,54 @@
+"""
+Project settings to be used during development.
+"""
+
+# Import everything from production settings 
+# and then overwrite some of it
+from .production import *
+
+DEBUG = True
+
+# Django Debug Toolbar
+# https://github.com/jazzband/django-debug-toolbar
+INSTALLED_APPS += [
+    'debug_toolbar',
+]
+
+MIDDLEWARE += [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+]
+
+# Necessary for the debug_toolbar
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
+
+ALLOWED_HOSTS = ['localhost']
+
+DATABASES = {
+    # ----- Example SQLite -----
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    # }
+    # ----- Example MySQL -----
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.mysql', 
+    #     'NAME': 'YOUR_DB_NAME',
+    #     'USER': 'YOUR_DB_USER',
+    #     'PASSWORD': 'PASSWORD_FOR_DB_USER',
+    #     'HOST': 'localhost',
+    #     'PORT': '3306',
+    # }
+}
+
+# When sending emails print them to the console instead
+# (useful for account verification, testing the newsletter, ...)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Use your local elasticsearch server for development
+WEBSITE_SEARCH_CLIENT = Elasticsearch(['localhost'])
+
+# Tell Pubmed who you are
+FETCHING_PUBMED_EMAIL = 'your@mail.com'
+FETCHING_PUBMED_API_KEY = 'YOUR_PUBMED_API_KEY'

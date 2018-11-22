@@ -1,0 +1,48 @@
+{% load page_extras %}
+
+{% for recommendation in recommendations %}
+
+    <div class="article" id="{{ recommendation.article.pk }}">
+        <div class="article-sidebar">
+            <div class="like-button{% if recommendation.liked %} active{% endif %}" url="{% url 'log_like' recommendation.article.pk %}"><i class="far fa-arrow-alt-circle-up"></i></div>
+            <div class="score" title="{{ recommendation.score }}">{{ recommendation.score | format_score }}</div>
+            <div class="dislike-button{% if recommendation.disliked %} active{% endif %}" url="{% url 'log_dislike' recommendation.article.pk %}"><i class="far fa-arrow-alt-circle-down"></i></div>
+        </div>
+        <div class="article-main">
+            <div class="title"><a href="{{ recommendation.article.url_fulltext }}" ping="{% url 'log_click' recommendation.article.pk %}" target="_blank">
+                {% if recommendation.article_highlighted and recommendation.article_highlighted.title_highlighted %}
+                {{ recommendation.article_highlighted.title_highlighted | highlight_escape | safe }}
+                {% else %}
+                {{ recommendation.article.title }}
+                {% endif %}
+            </a></div>
+            <div class="abstract">
+                {% if recommendation.article_highlighted and recommendation.article_highlighted.abstract_highlighted %}
+                {{ recommendation.article_highlighted.abstract_highlighted | highlight_escape | safe }}
+                {% else %}
+                {{ recommendation.article.abstract | format_abstract }}
+                {% endif %}
+            </div>
+            <div class="article-footer-box">
+                <div class="journal" title="{{ recommendation.article.journal }}">{{ recommendation.article.journal | format_journal }}</div>
+                <div class="authors" title="{{ recommendation.article.authors_list | format_authors_verbose }}">{{ recommendation.article.authors_list | format_authors }}</div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="article-separator">
+
+    {% if forloop.last and load_more_url %}
+        <div id="load-more-container">
+            <a id="load-more-button" href="{{ load_more_url }}">load more</a>
+            <div id="load-more-spinner">
+                {% include "website/snippets/loading_icon_horizontal.html" %}
+            </div>
+        </div>
+    {% endif %}
+
+{% empty %}
+    {% if not hide_empty_message %}
+    <p>Nothing here.</p>
+    {% endif %}
+{% endfor %}

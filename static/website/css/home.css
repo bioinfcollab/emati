@@ -1,0 +1,143 @@
+
+.title a {
+    color: #417690;
+    font-size: 18px;
+    font-weight: bold;
+    text-decoration: none;
+    font-family: sans-serif;
+}
+
+.title a:hover {
+    text-decoration: underline;
+}
+
+.journal {
+    color: #417690;
+    border-right: 2px solid lightgrey;
+    padding-right: 10px;
+    font-family: serif;
+    font-size: 16px;
+}
+
+.authors {
+    padding-left: 10px;
+    font-family: serif;
+    font-size: 16px;
+}
+
+.article {
+    display: flex;
+    flex-direction: row;
+}
+
+.score {
+    font-size: 12px;
+    margin: 10px 0;
+}
+
+.article-sidebar {
+    color: #bbb;
+    margin-right: 20px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.like-button:hover, .dislike-button:hover {
+    color: #444;
+    cursor: pointer;
+}
+
+.like-button.active {
+    color: #4d4;
+}
+
+.like-button.active:hover {
+    color: #0f0;
+}
+
+.dislike-button.active {
+    color: #f44;
+}
+
+.dislike-button.active:hover {
+    color: #f00;
+}
+
+.abstract{
+    margin-top: 10px;
+    font-size: 16px;
+    font-family: serif;
+    line-height: 130%;
+}
+
+.article-footer-box {
+    display: flex;
+    margin-top: 10px;
+}
+
+.article-separator {
+    border: 0px solid #ddd;
+    margin: 30px 0;
+}
+
+.result-info-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px 0;
+}
+
+.result-info-box-left {
+    width: 80%;
+    font-size: 12px;
+}
+
+.result-info-box a {
+    text-decoration: none;
+}
+
+.result-info-box a:hover {
+    text-decoration: underline;
+}
+
+.result-info-box-right {
+    font-size: 12px;
+    color: #aaa;
+}
+
+.week-selector {
+    letter-spacing: 1px;
+    text-decoration: none;
+}
+
+#cancel-search-button {
+    font-size: 14px;
+    color: #aaa;
+}
+
+#cancel-search-text {
+    margin-left: 5px;
+}
+
+#load-more-container {
+    width: 100%;
+    text-align: center;
+}
+
+#load-more-button {
+    margin: 0 auto;
+    color: #888;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+#load-more-button:hover {
+    text-decoration: underline;
+    color: #88f;
+}
+
+#load-more-spinner {
+    display: none;
+}

@@ -1,0 +1,26 @@
+{% extends "website/base.html" %}
+{% load static %}
+
+{% block css %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static '/website/css/single_box.css' %}" />
+{% endblock css %}
+
+{% block searchbar %}{% endblock %}
+
+{% block content %}
+<div class="content-box">
+    <h1>Change your E-Mail</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ email_form.as_p }}
+        <p>We will send a verification mail to this new address. Once you have
+        confirmed your new address, the change will be completed.</p>
+        <div class="button-container">
+            <button type="submit">Change E-Mail</button>
+            <a href="{% url 'settings' %}" class="button button-light">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock content %}

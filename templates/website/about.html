@@ -1,0 +1,46 @@
+{% extends "website/base.html" %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static '/website/css/about.css' %}" />
+{% endblock css %}
+
+{% block content %}
+<div class="content-box">
+    <h1>About Emati</h1>
+
+    <div class="back-link">
+        <a href="{% url 'welcome' %}">
+            <i class="fas fa-chevron-left"></i>Back
+        </a>
+    </div>
+
+    <p>Emati is a recommender system for scientific literature. From your
+    interactions we learn which topics you like and which you don't. Using
+    this information we rank the latest articles according to your interests.
+    New content is generated every sunday night. So check back Monday morning
+    to see what's new. Currently all papers are sourced from 
+    <a href="https://www.ncbi.nlm.nih.gov/pubmed/" target="_blank">PubMed</a> and <a href="https://arxiv.org/">arXiv</a>.
+    The range of topics is therefore limited to those also present there.
+    </p>
+
+    <p>Emati is developed by TU Dresden (Germany). The project is the result of
+    combined efforts of Kurt Lachmann, Richard Kwasnicki, Joschka Heinrich,
+    Alexandre Mestiashvili and Michael Schroeder.</p>
+
+    <div class="footer">
+        <div>
+            <a href="{% url 'about' %}">INFO</a>
+        </div>
+        <div>
+            <a href="{% url 'terms_and_conditions' %}">TERMS</a>
+        </div>
+        <div>
+            <a href="http://www.biotec.tu-dresden.de/imprint.html">IMPRINT</a>
+        </div>
+        <div>
+            <a href="mailto:{{ contact_email }}">CONTACT</a>
+        </div>
+    </div>
+</div>
+{% endblock content %}

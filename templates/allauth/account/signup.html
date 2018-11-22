@@ -1,0 +1,55 @@
+{% extends "website/base.html" %}
+
+{% load static %}
+{% load account socialaccount %}
+
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static '/website/css/login.css' %}" />
+{% endblock css %}
+
+
+{% block content %}
+
+<div class="content-box">
+	
+	<div class="header">
+		<h1>Signup</h1>
+	</div>
+	<div class="social-logins">
+		<div class="social-logins__item">
+			<a class="button google-button" href="{% provider_login_url 'google' %}">
+				Signup with Google
+			</a>
+		</div>
+		<div class="social-logins__item">
+			<a class="button facebook-button" href="{% provider_login_url 'facebook' %}">
+				Signup with Facebook
+			</a>
+		</div>
+	</div>
+	
+	<div class="separator-box">
+		<hr class="separator-box__separator">
+		<span class="separator-box__or">OR</span>
+	</div>
+	
+	<form class="login" method="POST">
+		{% csrf_token %}
+		{{ form.as_p }}
+		{% if redirect_field_value %}
+		<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+		{% endif %}
+		<button class="button" id="submit-button" type="submit">Sign Up</button>
+	</form>
+	
+	<div class="footer-box">
+		<div class="footer-box__item">
+			Already have an account?
+			<a href="{% url 'account_login' %}">Log in instead</a>
+		</div>
+	</div>
+	
+</div>
+
+{% endblock content %}

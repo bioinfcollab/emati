@@ -1,0 +1,34 @@
+{% extends 'website/base.html' %}
+{% load page_extras static %}
+
+{% comment %}
+The search page. Displays the search results.
+{% endcomment %}
+
+
+{% block css %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static '/website/css/home.css' %}" />
+{% endblock css %}
+
+{% block script %}
+    <script src="{% static 'website/js/logging.js' %}"></script>
+    <script src="{% static 'website/js/loadmore.js' %}"></script>
+{% endblock script %}
+
+
+{% block content %}
+<div class="content-box">
+    <div class="result-info-box">
+        <div class="result-info-box-left">
+            <a href="{{ cancel_search_url }}" id="cancel-search-button">
+                <i class="fas fa-undo-alt"></i><span id="cancel-search-text">Cancel search</span>
+            </a>
+        </div>
+        <div class="result-info-box-right">
+            {{ total_results }} result{{ total_results | pluralize }}
+        </div>
+    </div>
+    {% include 'website/snippets/recommendations.html' %}
+</div>
+{% endblock content %}

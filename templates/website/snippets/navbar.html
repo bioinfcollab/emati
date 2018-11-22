@@ -1,0 +1,32 @@
+{% load page_extras %}
+
+<div class="nav">
+    <div id="user-email">
+        {{ user.email }}
+    </div>
+
+    {% if user.is_staff %}
+        <a href="{% url 'dashboard:main' %}" class="nav-item">
+            <div>
+                <i class="fas fa-chart-bar"></i>
+            </div>
+        </a>
+    {% endif %}
+
+    <a href="{% url 'home' %}" class="nav-item{% active request 'home' 'search' %}">
+        <div>
+            HOME
+        </div>
+    </a>
+    <a href="{% url 'settings' %}" class="nav-item{% active request 'settings' %}">
+        <div>
+            SETTINGS
+        </div>
+    </a>
+    <a href="{% url 'about' %}" class="nav-item{% active request 'about' %}">
+        <div>
+            ABOUT
+        </div>
+    </a>
+
+</div>

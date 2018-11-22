@@ -1,0 +1,61 @@
+.vertical-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.horizontal-content {
+    display: flex;
+    flex-direction: row;
+}
+
+.welcome-box {
+    margin-top: 100px;
+}
+
+.page-title {
+    padding: 0;
+}
+
+.page-subtitle {
+    font-family: 'Times New Roman', Times, serif;
+    color: #316680;
+}
+
+.welcome-sidebar {
+    padding-left: 40px;
+}
+
+.welcome-buttons > * {
+    margin-right: 20px;
+}
+
+a > i {
+    margin-right: 10px;
+}
+
+.welcome-footer {
+    justify-content: center;
+    font-size: 10px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.welcome-footer a {
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+.welcome-footer a:hover {
+    text-decoration: underline;
+}
+
+.content-box {
+    padding-bottom: 20px;
+}
+
+
+@media all and (max-width: 600px) {
+    .document-image {
+        display: none;
+    }
+}

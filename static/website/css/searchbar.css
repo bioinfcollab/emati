@@ -1,0 +1,66 @@
+#searchbar {
+    width: 30%;
+    margin: 0 10px;
+    max-width: 400px;
+    flex-grow: 100;
+}
+
+#search-form {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+#search-query-field {
+    padding: 5px;
+    border: none;
+    border-bottom: 1px solid #aad;
+    background-color: transparent;
+    color: #ddf;
+    flex-grow: 100;
+}
+
+#search-query-field::placeholder {
+    color: #ccf;
+}
+
+#search-query-field:focus::placeholder {
+    color: #ccd;
+}
+
+#search-query-field:focus {
+    outline: 0;
+    border-bottom: 1px solid #ddf;
+    background-color: #5186a0;
+}
+
+#search-query-field:-webkit-autofill {
+    /* Keep our own style for chrome autocompletion suggestions */
+    -webkit-box-shadow: 0 0 0 30px #5186a0 inset;
+    -webkit-text-fill-color: #ddf !important;
+}
+
+#search-submit-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: #aad;
+}
+
+#search-submit-button:hover {
+    color: #eef;
+}
+
+
+/* clears the 'X' from search boxes in Internet Explorer */
+input[type=search]::-ms-clear {  display: none; width : 0; height: 0; }
+input[type=search]::-ms-reveal {  display: none; width : 0; height: 0; }
+
+/* clears the 'X' from search boxes in Chrome */
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration { display: none; }
