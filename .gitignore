@@ -8,10 +8,10 @@ __pycache__/
 *.sublime-*
 
 # Ignore the settings files
-emati/settings/*.py
+/emati/settings/*.py
 
 # Ignore user classifiers and uploads
-media/
+/media/
 
 # Ignore log files
-logs/
+/logs/
