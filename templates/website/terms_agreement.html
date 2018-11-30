@@ -13,6 +13,7 @@ hasn't agreed to our terms yet.
 <script src="{% static 'website/js/terms_agreement.js' %}"></script>
 {% endblock script %}
 
+
 {% comment %}
 Overwrite with empty blocks to hide searchbar and navbar
 {% endcomment %}
@@ -50,6 +51,9 @@ Overwrite with empty blocks to hide searchbar and navbar
             <button class="button" id="consent-button" type="submit" disabled>
                 Continue
             </button>
+            <a href="{% url 'account_logout' %}" class="button button-light" id="cancel-button">
+                Disagree
+            </a>
         </p>
     </form>
 </div>

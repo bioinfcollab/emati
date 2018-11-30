@@ -59,6 +59,9 @@ At `Sites` add/edit the site to your personal "Domain name" and "Display name". 
 
 At `Social Applications` add a new provider for Google and one for Facebook. For this, pick the provider from the dropdown list, give it an arbitrary name ("google"/"facebook"), add your Client IDs and Secret Keys, and move the site which you configured in the previous step from "Available sites" to "Chosen sites".
 
+To obtain those credentials you have to register a new OAuth project at the respective developer console of Google (console.developers.google.com) and Facebook (developers.facebook.com). The only important settings in that developer console is the Redirect URI. Set it to "<YOUR_DOMAIN>/accounts/google/login/callback" or "<YOUR_DOMAIN>/accounts/facebook/login/callback"
+<YOUR_DOMAIN> must be a valid URL, for example https://www.emati.de
+
 
 # Initial data fetching
 Before making the website available to the public you should download some initial articles. You can download all papers published after a specific date using the command

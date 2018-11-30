@@ -258,6 +258,10 @@ EMAIL_HOST_USER = 'you@mail.com'
 EMAIL_HOST_PASSWORD = 'yourpassword'
 EMAIL_PORT = 587
 
+# Default email address to use for various automated correspondence from the site manager.
+# Doesn't include error messages sent to Admins. For those see SERVER_EMAIL.
+DEFAULT_FROM_EMAIL = 'webmaster@localhost'
+
 
 #------------------------------------------------------------
 # Messages
@@ -346,6 +350,9 @@ DASHBOARD_PROJECT_REPOSITORY = 'https://projects.biotec.tu-dresden.de/redmine/pr
 ADMINS = [
     ('yourname', 'your.name@email.com')
 ]
+
+# The email address that error messages come from.
+SERVER_EMAIL = 'root@locahost'
 
 LOGGING = {
     'version': 1,
