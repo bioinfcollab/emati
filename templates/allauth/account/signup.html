@@ -40,6 +40,12 @@
 		{% if redirect_field_value %}
 		<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
 		{% endif %}
+		<div class="terms-notice">
+			By registering you agree to our 
+			<a href="{% url 'terms_and_conditions'%}" target="_blank">
+				Terms and Conditions
+			</a>
+		</div>
 		<button class="button" id="submit-button" type="submit">Sign Up</button>
 	</form>
 	

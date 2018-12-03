@@ -87,3 +87,10 @@
 .footer-box__item a:hover {
     text-decoration: underline;
 }
+
+
+.terms-notice {
+    color: #888;
+    font-size: 10px;
+    margin: 10px 0;
+}
