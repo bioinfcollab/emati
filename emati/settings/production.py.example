@@ -298,7 +298,7 @@ FETCHING_SOURCES = [
 # Number of papers to download at once when fetching
 FETCHING_BATCH_SIZE = 1000
 
-# Querying PubMed requires an email and a key
+# Tell Pubmed who we are. If you have no API key you should set it to None.
 FETCHING_PUBMED_EMAIL = 'your@mail.com'
 FETCHING_PUBMED_API_KEY = 'YOUR_PUBMED_API_KEY'
 

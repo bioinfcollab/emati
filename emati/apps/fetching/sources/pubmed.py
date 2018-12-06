@@ -253,9 +253,11 @@ class Pubmed:
                 
                 logger.info('Found {} PMIDs.'.format(len(record["IdList"])))
                 return record["IdList"]
-            except (Timeout, HTTPError, SocketError):
+            except (Timeout, HTTPError, SocketError) as e:
                 logger.warning("An error occured while fetching Pubmed IDs. Trying again in {} seconds.".format(WAIT_SECONDS))
+                logger.error(e)
                 time.sleep(WAIT_SECONDS)
+        return []
 
 
     def _fetch_papers(self, pmid_list):
