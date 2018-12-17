@@ -253,9 +253,12 @@ class Pubmed:
                 
                 logger.info('Found {} PMIDs.'.format(len(record["IdList"])))
                 return record["IdList"]
-            except (Timeout, HTTPError, SocketError) as e:
-                logger.warning("An error occured while fetching Pubmed IDs. Trying again in {} seconds.".format(WAIT_SECONDS))
-                logger.error(e)
+            except:
+                logger.error(
+                    "An error occured while fetching Pubmed IDs. " +
+                    "Trying again in {} seconds.".format(WAIT_SECONDS), 
+                    exc_info=True
+                )
                 time.sleep(WAIT_SECONDS)
         return []
 
@@ -270,21 +273,26 @@ class Pubmed:
         step_size = 10000
         records = []
         while start < len(pmid_list):
-            try:
-                # Get the articles from pubmed
-                handle = Entrez.efetch(
-                    db="pubmed", id=pmid_list, rettype="medline", 
-                    retmode="text", retstart=start, retmax=step_size
-                )
+            for num_tries in range(MAX_NR_REQUESTS):
+                try:
+                    # Get the articles from pubmed
+                    handle = Entrez.efetch(
+                        db="pubmed", id=pmid_list, rettype="medline", 
+                        retmode="text", retstart=start, retmax=step_size
+                    )
 
-                parsed_results = Medline.parse(handle)
-                records += list(parsed_results)
+                    parsed_results = Medline.parse(handle)
+                    records += list(parsed_results)
 
-                start += step_size
-            except (Timeout, HTTPError, SocketError, RuntimeError):
-                logger.warning("An error occured while fetching Pubmed records. Trying again in 10 seconds.", exc_info=True)
-                # Wait a bit to avoid sending too many requests
-                time.sleep(10)
+                    start += step_size
+                except:
+                    logger.error("An error occured while fetching Pubmed records:", exc_info=True)
+                    if num_tries == MAX_NR_REQUESTS - 1:
+                        logger.warning("Maximum number of tries reached. Stopping here.")
+                    else:
+                        logger.warning("Trying again in {} seconds.".format(WAIT_SECONDS))
+                    # Wait a bit to avoid sending too many requests
+                    time.sleep(WAIT_SECONDS)
         return records
 
 
@@ -320,13 +328,18 @@ class Pubmed:
         while idlist:
             slist = idlist[:step_size]
             del idlist[:step_size]
-            while True:
+            for num_tries in range(MAX_NR_REQUESTS):
                 try:
                     handle = Entrez.elink(db="pubmed", id=slist, cmd="prlinks", retmode="xml")
                     break
-                except (Timeout, HTTPError, SocketError, RuntimeError):
-                    logger.warning("Error while loading articles. Trying again in {} seconds.".format(WAIT_SECONDS), exc_info=True)
-                    time.sleep(WAIT_SECONDS)
+                except:
+                    logger.error("Error while loading data:", exc_info=True)
+                    if num_tries == MAX_NR_REQUESTS - 1:
+                        logger.warning("Maximum number of tries reached. Stopping here.")
+                        return record_map.values()
+                    else:
+                        logger.warning("Trying again in {} seconds.".format(WAIT_SECONDS))
+                        time.sleep(WAIT_SECONDS)
             
             root = Entrez.read(handle)
             for r in root:
