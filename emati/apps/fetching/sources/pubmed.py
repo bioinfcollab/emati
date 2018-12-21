@@ -285,15 +285,15 @@ class Pubmed:
                     records += list(parsed_results)
 
                     start += step_size
-		    break
+                    break
                 except:
                     logger.error("An error occured while fetching Pubmed records:", exc_info=True)
                     if num_tries == MAX_NR_REQUESTS - 1:
                         logger.warning("Maximum number of tries reached. Stopping here.")
                     else:
                         logger.warning("Trying again in {} seconds.".format(WAIT_SECONDS))
-	                # Wait a bit to avoid sending too many requests
-        	        time.sleep(WAIT_SECONDS)
+                        # Wait a bit to avoid sending too many requests
+                        time.sleep(WAIT_SECONDS)
         return records
 
 
