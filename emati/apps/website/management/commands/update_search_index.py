@@ -22,6 +22,11 @@ class Command(BaseCommand):
             action='store_true',
             help=""
         )
+        parser.add_argument(
+            '--last-month',
+            action='store_true',
+            help=""
+        )
 
 
     def handle(self, *args, **options):
@@ -30,6 +35,8 @@ class Command(BaseCommand):
             after = datetime.date.today() - datetime.timedelta(days=1)
         elif options['last_week']:
             after = datetime.date.today() - datetime.timedelta(days=7)
+        elif options['last_month']:
+            after = datetime.date.today() - datetime.timedelta(days=30)
         else:
             after = None
         search.update_index(only_after=after)
