@@ -25,8 +25,13 @@ class Command(BaseCommand):
 
 
     def add_arguments(self, parser):
-        parser.add_argument('user_id', type=int, nargs='+', help="")
-        parser.add_argument('--exhaustive', action='store_true', help="")
+        parser.add_argument('user_id', type=int, nargs='+', 
+            help="""A list of user IDs for which to train a classifier."""
+        )
+        parser.add_argument('--exhaustive', action='store_true', 
+            help="""Try to look up missing abstracts from all registered 
+            sources. Training will take significantly longer."""
+        )
 
 
     def handle(self, *args, **options):

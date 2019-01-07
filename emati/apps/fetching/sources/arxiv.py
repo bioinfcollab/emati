@@ -7,12 +7,13 @@ import feedparser
 from django.db.utils import IntegrityError
 from django.conf import settings
 from website.models import Article
+from .abstractsource import AbstractSource
 
 import logging
 logger = logging.getLogger(__name__)
 
 
-class Arxiv():
+class Arxiv(AbstractSource):
 
 
     def __init__(self):

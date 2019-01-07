@@ -13,6 +13,7 @@ from datetime import datetime, date
 from django.db.utils import IntegrityError
 from django.conf import settings
 
+from .abstractsource import AbstractSource
 from website.models import Article
 
 import logging
@@ -28,7 +29,7 @@ MAX_NR_REQUESTS = 10
 
 
 
-class Pubmed:
+class Pubmed(AbstractSource):
 
 
     def __init__(self):
