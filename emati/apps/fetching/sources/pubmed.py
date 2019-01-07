@@ -33,14 +33,9 @@ class Pubmed(AbstractSource):
 
 
     def __init__(self):
+        super().__init__()
         Entrez.email = settings.FETCHING_PUBMED_EMAIL
         Entrez.api_key = settings.FETCHING_PUBMED_API_KEY
-
-        # Set batch size for downloading
-        if settings.FETCHING_BATCH_SIZE:
-            self.batch_size = settings.FETCHING_BATCH_SIZE
-        else:
-            self.batch_size = 1000
 
 
     def _compose_query(self, query, start_date=None, end_date=None):

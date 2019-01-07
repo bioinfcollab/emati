@@ -17,10 +17,7 @@ class Arxiv(AbstractSource):
 
 
     def __init__(self):
-        if settings.FETCHING_BATCH_SIZE:
-            self.batch_size = settings.FETCHING_BATCH_SIZE
-        else:
-            self.batch_size = 1000
+        super().__init__()
     
 
     def _compose_query(self, query, start_date=None, end_date=None):

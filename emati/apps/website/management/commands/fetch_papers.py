@@ -9,9 +9,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def falid_date(s):
-    return date.today()
-
 class Command(BaseCommand):
     help = 'Calculate scores for recommendations for given users and articles.'
     date_format = '%Y-%m-%d'

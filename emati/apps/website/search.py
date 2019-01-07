@@ -2,11 +2,7 @@
 
 """
 
-# NOTE: when disk space is very low Elasticsearch will set the index to
-# read-only. This prevents updating the index any further. It must be manually
-# enabled again: curl -XPUT -H "Content-Type: application/json"
-# localhost:9200/_all/_settings -d '{"index.blocks.read_only_allow_delete":
-# null}'
+from datetime import date
 
 import elasticsearch
 import elasticsearch.helpers
@@ -70,20 +66,21 @@ def fulltext_search(query_string, offset=0, max_results=10):
     return total_results, articles
         
 
-def update_index(only_after=None):
-    """Update the index with articles from the database.
+def update_index(start_date=None, end_date=None):
+    """Update the index with articles from the database. Use start_date and 
+    end_date to restrict the time range. If no date is specified, all
+    articles found in the database will be reindex.
 
     Args:
-        only_after (date): Only update articles published after this date.
-            If no date is specified, all articles from the database will 
-            be reindexed.
+        start_date (date): Only update articles published after this date.
+        end_date (date): Only index articles published before this date.
     """
 
-    # Only index articles published after the given date
-    if only_after is not None:
-        articles = Article.objects.filter(pubdate__gte=only_after)
-    else:
-        articles = Article.objects.all()
+    articles = Article.objects.all()
+    if start_date is not None:
+        articles = articles.filter(pubdate__gte=start_date)
+    if end_date is not None:
+        articles = articles.filter(pubdate__lte=end_date)
 
     # Make sure articles are ordered or else we risk
     # getting the same article in different batches
