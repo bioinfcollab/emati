@@ -2,10 +2,13 @@ import os
 import json
 import datetime
 import requests
+import multiprocessing
 from collections import defaultdict
 from subprocess import Popen
 from ipware import get_client_ip
 
+
+from django import db
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.http import HttpResponse, QueryDict
@@ -395,6 +398,14 @@ class SettingsView(LoginRequiredMixin, TemplateView):
         return context
 
 
+    def update_content(self, userid):
+        """Meant to run in the background as a separate process. 
+        Called after a file was uploaded/deleted. Retrains the 
+        classifier and creates some recommendations."""
+        management.call_command('train_classifiers', userid)
+        management.call_command('create_recommendations', '--last-week', user_ids=[userid])
+
+
     def post(self, request, *args, **kwargs):
         """Handles saving the user's settings."""
         new_files = request.FILES.getlist('newfile')
@@ -431,15 +442,17 @@ class SettingsView(LoginRequiredMixin, TemplateView):
         
         # Retrain classifier if files were added or deleted
         if files_changed:
-            # Train in separate process so as not to keep the server busy
-            # Also if training was successfull we recalculate last week's content
-            userid = str(request.user.pk)
-            command = (
-                "python manage.py train_classifiers " + userid
-                + " && "
-                + "python manage.py create_recommendations --last-week -u " + userid
-            )
-            Popen(command, shell=True)
+
+            # Close our database connection so that each process can generate
+            # a custom connection. Sharing one connection is not allowed.
+            db.connections.close_all()
+
+            # Start a subprocess and create some recommendations based on the
+            # new training data that we now have.
+            multiprocessing.Process(
+                target=self.update_content, 
+                args=[request.user.pk]
+            ).start()
 
         # Save all other settings
         settings_form = SettingsForm(request.POST)

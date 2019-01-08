@@ -169,9 +169,9 @@ class Command(BaseCommand):
         uploaded = self._get_uploaded_articles(exhaustive)
         logger.info('  {} uploaded articles'.format(len(uploaded)))
 
-        # Ensure we have data to train with
-        if len(likes) + len(dislikes) + len(clicks) + len(uploaded) <= 0:
-            logger.warning('ABORTING TRAINING. No data to train on.')
+        # Ensure we have enough data to train with
+        if len(likes) + len(dislikes) + len(clicks) + len(uploaded) <= 10:
+            logger.warning('ABORTING TRAINING. Not enough data for training.')
             return None
 
         # Configure trainer with our data
@@ -185,7 +185,7 @@ class Command(BaseCommand):
         nr_negatives = len(dislikes)
         nr_padding_negatives = nr_positives - nr_negatives
 
-        # Only proceed if positives indeed outweigh the negatives
+        # Do we need to add random articles?
         if (nr_padding_negatives > 0):
             
             # Get a list of IDs of articles that were already considered for
@@ -195,7 +195,7 @@ class Command(BaseCommand):
             excluded_keys = [a.pk for a in article_list]
             
             # Get a random set of articles and add them to the trainer. 
-            # Avoid randomly picking a previous added article.
+            # Avoid randomly picking a previously added article.
             logger.info('  {} random articles as negatives'.format(nr_padding_negatives))
             random_articles = self._get_random_articles(nr_padding_negatives, excluded_keys)
             self._add_articles_to_trainer(trainer, random_articles, Targets.IRRELEVANT)
