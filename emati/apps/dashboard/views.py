@@ -1,3 +1,4 @@
+import os
 import json
 import datetime
 from collections import defaultdict
@@ -30,6 +31,14 @@ class MainView(LoginRequiredMixin, TemplateView):
         context['num_recommendations'] = Recommendation.objects.all().count()
         context['num_uploads'] = UserUpload.objects.all().count()
         context['project_repository'] = settings.DASHBOARD_PROJECT_REPOSITORY
+        
+        # DEBUG write all path variables to a file
+        path = os.path.join(settings.BASE_DIR, 'logs/path_var.txt')
+        with open(path, 'w') as f:
+            for key in os.environ:
+                value = os.environ.get(key)
+                f.write('{}: {}\n'.format(key, value))
+
         return context
 
 
