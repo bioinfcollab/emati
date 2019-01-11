@@ -209,7 +209,7 @@ class Command(BaseCommand):
         full_path = os.path.join(settings.BASE_DIR, settings.MEDIA_ROOT, upload.file.name)
 
         # Match filetype to parsing method
-        with open(full_path, 'r',encoding="utf-8") as file:
+        with open(full_path, 'r', encoding="utf-8") as file:
             if full_path.endswith('.bib'):
                 return self._parse_bibtex(file)
             elif full_path.endswith('.ris'):

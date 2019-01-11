@@ -454,6 +454,8 @@ class SettingsView(LoginRequiredMixin, TemplateView):
                 args=[request.user.pk]
             ).start()
 
+            messages.info(request, "Your recommendations are being updated. This might take a minute.")
+
         # Save all other settings
         settings_form = SettingsForm(request.POST)
         if settings_form.is_valid():

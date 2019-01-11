@@ -119,6 +119,7 @@ $(document).ready(function() {
      * (Which are by default deactivated)
      */
     function settingsChanged() {
+        $("#settings-buttons__save").removeAttr('disabled');
         $(".settings-buttons .button-disabled").removeClass("button-disabled");
     }
 
