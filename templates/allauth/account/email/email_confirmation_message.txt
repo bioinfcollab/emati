@@ -1,8 +1,9 @@
 {% load account %}
 {% user_display user as user_display %}
 {% autoescape off %}
+Hello,
 
-You're receiving this e-mail because user {{ user_display }} has given yours as an e-mail address to connect to their account.
+you are receiving this mail because this address was used to sign up at {{ current_site.domain }}.
 
 To confirm, this is correct, please go to {{ activate_url }}
 {% endautoescape %}
