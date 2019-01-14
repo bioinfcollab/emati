@@ -209,7 +209,7 @@ class Command(BaseCommand):
         full_path = os.path.join(settings.BASE_DIR, settings.MEDIA_ROOT, upload.file.name)
 
         # Match filetype to parsing method
-        with open(full_path, 'r', encoding="utf-8") as file:
+        with open(full_path, 'r', encoding="utf-8", errors="ignore") as file:
             if full_path.endswith('.bib'):
                 return self._parse_bibtex(file)
             elif full_path.endswith('.ris'):
@@ -222,10 +222,12 @@ class Command(BaseCommand):
     def _parse_bibtex(self, file):
         """Parses a BibText file (.bib).
         Returns a list of articles found in the given file."""
-        parser = bibtexparser.bparser.BibTexParser()
-        parser.interpolate_strings = False
-        parser.ignore_nonstandard_types = True
-        bib_database = bibtexparser.loads(file.read(), parser=parser)
+        parser = bibtexparser.bparser.BibTexParser(
+            common_strings=True,
+            interpolate_strings = False,
+            ignore_nonstandard_types = True,
+        )
+        bib_database = parser.parse_file(file)
 
         articles = []
         for entry in bib_database.entries:
