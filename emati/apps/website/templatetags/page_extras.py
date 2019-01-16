@@ -35,6 +35,7 @@ def format_authors(authors):
     # Defines how an author's name is displayed
     def prepare_author(a):
         # Prints authors as e.g. "Schroeder M"
+        a = a.strip()
         try:
             lastname, firstname = a.split(',')
         except ValueError:
@@ -43,13 +44,17 @@ def format_authors(authors):
             except ValueError:
                 return a
         
+        # Remove trailing whitespace
+        firstname = firstname.strip()
+        lastname = lastname.strip()
+
         # Try to get the initial letter
         if firstname:
-            initial = firstname.strip()[0]
+            initial = firstname[0]
         else:
             initial = ""
 
-        return ' '.join([lastname.strip(), initial])
+        return (lastname + ' ' + initial).strip()
 
     authors = [prepare_author(a) for a in authors]
 
