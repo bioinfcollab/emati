@@ -43,6 +43,11 @@
 
 {% empty %}
     {% if not hide_empty_message %}
-    <p>Nothing here.</p>
+        <p>Nothing here.</p>
+        {% if not classifier_initialized %}
+            <p>We don't know your interests yet. You can upload a BibTex
+            (.bib) file in your <a href="{% url 'settings' %}">settings</a> to
+            kickstart your recommendation model.</p>
+        {% endif %}
     {% endif %}
 {% endfor %}

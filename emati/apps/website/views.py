@@ -186,6 +186,7 @@ class HomePageView(LoginRequiredMixin, WeekBrowsingMixin, TemplateView):
         context['recommendations'] = recommendations
         context['search_form'] = SearchForm(self.request.GET)
         context['load_more_url'] = reverse('load_more_home')
+        context['classifier_initialized'] = self.request.user.classifier.is_initialized()
         return context
 
 
