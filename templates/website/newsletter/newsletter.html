@@ -1,10 +1,12 @@
-<h1>Hello {{ user.email }},</h1>
+{% load page_extras %}
+
+Hello {{ user.email }},
 
 here are your top-ranked articles from last week:
 
-{% for recommendation in recommendations %}<a href="{{ recommendation.article.url_fulltext }}" ping="{% url 'log_click' recommendation.article.pk %}">{{ recommendation.article.title }}</a>
+{% for recommendation in recommendations %}
+<a href="{{ recommendation.article.url_fulltext }}" ping="{% absolute_url 'log_click' recommendation.article.pk %}">{{ recommendation.article.title }}</a>
 {% endfor %}
-<p>Check out <a href="{{ current_site.domain }}">{{ current_site.name }}</a>
-for more articles.</p>
 
+<p>Check out <a href="{{ current_site.domain }}">{{ current_site.name }}</a> for more articles.</p>
 <p>You can unsubscribe from this newsletter in your Emati settings.</p>

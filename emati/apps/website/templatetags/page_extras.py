@@ -5,8 +5,17 @@ from django.conf import settings
 from django.http import QueryDict
 from django.utils.html import escape
 from django.urls import reverse
+from django.contrib.sites.models import Site
 
 register = template.Library()
+
+
+@register.simple_tag
+def absolute_url(url, *args):
+    """Like `reverse` but returns the absolute url.
+    The domain is based on the one configured in the admin interface."""
+    domain = Site.objects.get_current()
+    return 'https://' + str(domain) + reverse(url, args=args)
 
 
 @register.filter
