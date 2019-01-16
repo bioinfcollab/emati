@@ -42,7 +42,14 @@ def format_authors(authors):
                 lastname, firstname = a.split(' ')
             except ValueError:
                 return a
-        return lastname.strip() + ' ' + firstname.strip()[0]
+        
+        # Try to get the initial letter
+        if firstname:
+            initial = firstname.strip()[0]
+        else:
+            initial = ""
+
+        return ' '.join([lastname.strip(), initial])
 
     authors = [prepare_author(a) for a in authors]
 
