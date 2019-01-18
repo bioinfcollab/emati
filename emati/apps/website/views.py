@@ -232,8 +232,8 @@ class SearchView(LoginRequiredMixin, TemplateView):
             query, max_results=settings.WEBSITE_SEARCH_MAX_RESULTS
         )
 
-        # Only work with initialized classifiers
-        if self.request.user.classifier.is_initialized():
+        # Check if there is data to rank and the classifier is initialized
+        if articles and self.request.user.classifier.is_initialized():
             ranker = ArticleRanker(self.request.user.classifier)
             articles_with_scores = ranker.rank_articles(articles)
 
@@ -256,6 +256,7 @@ class SearchView(LoginRequiredMixin, TemplateView):
         context['recommendations'] = recommendations
         context['search_form'] = SearchForm(self.request.GET)
         context['cancel_search_url'] = self._get_home_url(self.request)
+        context['classifier_initialized'] = self.request.user.classifier.is_initialized()
 
         return context
 

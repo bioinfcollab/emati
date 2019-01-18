@@ -27,9 +27,10 @@ def fulltext_search(query_string, offset=0, max_results=10):
 
     Args:
         query_string (string): the search query.
+        offset (int): Skip this number of results.
         max_results (int): maximum number of results to return.
 
-    Returns: a list of articles.
+    Returns: a tuple of (total_number_of_results, list_of_articles).
     """
 
     if query_string is None:
