@@ -235,12 +235,18 @@ class Command(BaseCommand):
         articles = []
         for entry in bib_database.entries:
             a = Article()
-            if 'title' in entry:
-                a.title = entry['title']
-            if 'abstract' in entry:
-                a.abstract = entry['abstract']
-            if 'journal' in entry:
-                a.journal = entry['journal']
+
+            # Remove curly braces from all fields
+            # This creates a "plain_" version for all fields
+            entry = bibtexparser.customization.add_plaintext_fields(entry)
+
+            if 'plain_title' in entry:
+                # Remove line breaks from titles
+                a.title = entry['plain_title'].replace('\n', '')
+            if 'plain_abstract' in entry:
+                a.abstract = entry['plain_abstract']
+            if 'plain_journal' in entry:
+                a.journal = entry['plain_journal']
 
             if 'author' in entry:
                 a.authors_list = entry['author'].split(' and ')
