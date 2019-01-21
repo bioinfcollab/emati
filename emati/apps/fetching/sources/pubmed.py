@@ -81,6 +81,10 @@ class Pubmed(AbstractSource):
         # Get a list of ids
         idlist = self._fetch_ids(query)
 
+        # Shorten the list if desired
+        if max_results is not None:
+            idlist = idlist[:max_results]
+
         # Get the actual content for these ids
         records = self._fetch_papers(idlist)
 

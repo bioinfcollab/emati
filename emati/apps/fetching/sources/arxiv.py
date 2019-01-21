@@ -72,9 +72,12 @@ class Arxiv(AbstractSource):
             search_type = 'title'
 
         query = self._compose_query(query, start_date, end_date)
-        results = self._get_result_dict(
+        results, _ = self._get_result_tuple(
             query, start=0, max_results=max_results, search_type=search_type
-        )['entries']
+        )
+        
+        if not results:
+            return []
 
         articles = []
         for result in results:
@@ -93,14 +96,13 @@ class Arxiv(AbstractSource):
         logger.info('Querying for "{}" ...'.format(query))
 
         start = 0
-        result_dict = self._get_result_dict(
+        results, total_num_results = self._get_result_tuple(
             query, start=start, max_results=self.batch_size
         )
-        if result_dict is None:
+        if not results:
             logger.info("No results")
+            return
 
-        results = result_dict['entries']
-        total_num_results = int(result_dict['feed']['opensearch_totalresults'])
         num_new_results = 0
         num_integrity_errors = 0
         while results:
@@ -117,9 +119,9 @@ class Arxiv(AbstractSource):
                         num_integrity_errors += 1
 
             start += self.batch_size
-            results = self._get_result_dict(
+            results, _ = self._get_result_tuple(
                 query, start=start, max_results=self.batch_size
-            )['entries']
+            )
 
             logger.info("  {}/{}".format(
                 min(start, total_num_results), total_num_results)
@@ -133,16 +135,15 @@ class Arxiv(AbstractSource):
             logger.info(msg)
 
 
-    def _get_result_dict(self, search_query, id_list=[], start=0, max_results=10, 
+    def _get_result_tuple(self, search_query, id_list=[], start=0, max_results=10, 
                      sort_by='relevance', sort_order='descending', 
                      search_type='all'):
         """
         Queries arxiv.org and parses the returned results. Returns the
-        dictionary containing the complete response. The total number of
-        available records will be stored in
-        ['feed']['opensearch_totalresults'] while the list of actually
-        returned records is stored in ['entries']. Returns None if no results
-        were found for this search request.
+        dictionary containing the complete response. Returns a tuple of 
+        (results, num_results), where `results` is a list of the results 
+        returned in this batch and `num_results` is the total amount of
+        results found for this query string.
         """
         url = (
             'http://export.arxiv.org/api/query?'
@@ -162,12 +163,14 @@ class Arxiv(AbstractSource):
             sort_by, 
             sort_order
         )
-        results = feedparser.parse(url)
-        if results.get('status') != 200:
-            logger.error("HTTP Error " + str(results.get('status', 'no status')) + " in query")
-            return None
+        result_dict = feedparser.parse(url)
+        if result_dict.get('status') != 200:
+            logger.error("HTTP Error " + str(result_dict.get('status', 'no status')) + " in query")
+            return None, None
         else:
-            return results
+            total_num_results = int(result_dict['feed']['opensearch_totalresults'])
+            results = result_dict['entries']
+            return results, total_num_results
 
     
     def _format_article(self, result):

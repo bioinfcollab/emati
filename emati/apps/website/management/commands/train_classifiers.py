@@ -126,7 +126,10 @@ class Command(BaseCommand):
                     logger.info("Updating article {}/{} ...".format(i, len(articles_in_file)))
 
                     # Start a search in all sources for this specific title
-                    queried_articles = fetcher.query_title(a.title, get_fulltext_url=False)
+                    queried_articles = fetcher.query_title(
+                        a.title, 
+                        max_results=10
+                    )
 
                     # The search probably returned more than one article
                     # Therefore loop over all those results

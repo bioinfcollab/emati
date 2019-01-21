@@ -54,18 +54,28 @@ class Fetcher:
             s.download(query, start_date, end_date)
 
     
-    def query(self, query, start_date=None, end_date=None):
+    def query(self, query, start_date=None, end_date=None, max_results=10):
         """Query all sources for a given query string."""
         articles = []
         for s in self.sources:
-            articles += s.query(query, start_date, end_date)
+            articles += s.query(
+                query, 
+                start_date=start_date, 
+                end_date=end_date, 
+                max_results=max_results
+            )
         return articles
 
     
-    def query_title(self, query, get_fulltext_url=True):
+    def query_title(self, query, start_date=None, end_date=None, max_results=10):
         """Query all sources for a query string but only look at titles."""
         articles = []
         for s in self.sources:
-            articles += s.query_title(query)
+            articles += s.query_title(
+                query, 
+                start_date=start_date, 
+                end_date=end_date, 
+                max_results=max_results
+            )
         return articles
 
