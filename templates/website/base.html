@@ -26,8 +26,10 @@ The base skeleton for HTML pages.
 </head>
 
 <body>
+<div id="page-container">
+
     {% block header %}
-    <div class="page-header">
+    <div id="page-header">
         <div class="page-title">
             <a href="{% url 'welcome' %}">Emati</a>
         </div>
@@ -86,5 +88,23 @@ The base skeleton for HTML pages.
         {% endblock content %}
     </div>
     {% endblock body %}
+
+
+    <div id="page-footer">
+        <div class="page-footer__box">
+            <a href="{% url 'about' %}">INFO</a>
+        </div>
+        <div class="page-footer__box">
+            <a href="{% url 'terms_and_conditions' %}">TERMS</a>
+        </div>
+        <div class="page-footer__box">
+            <a href="http://www.biotec.tu-dresden.de/imprint.html">IMPRINT</a>
+        </div>
+        <div class="page-footer__box">
+            <a href="mailto:{{ contact_email }}">CONTACT</a>
+        </div>
+    </div>
+
+</div>
 </body>
 </html>

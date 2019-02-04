@@ -33,26 +33,6 @@ a > i {
     margin-right: 10px;
 }
 
-.welcome-footer {
-    justify-content: center;
-    font-size: 10px;
-    font-weight: bold;
-    margin-top: 20px;
-}
-
-.welcome-footer a {
-    text-decoration: none;
-    margin: 0 10px;
-}
-
-.welcome-footer a:hover {
-    text-decoration: underline;
-}
-
-.content-box {
-    padding-bottom: 20px;
-}
-
 
 @media all and (max-width: 600px) {
     .document-image {
