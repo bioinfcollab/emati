@@ -35,6 +35,7 @@ class Command(BaseCommand):
 
 
     def get_last_sunday(self):
+        """Returns the last monday as YYYY-MM-DD"""
         today = datetime.date.today()
         monday = today - datetime.timedelta(days=today.weekday())
         sunday = monday - datetime.timedelta(days=1)
@@ -49,9 +50,10 @@ class Command(BaseCommand):
         [to@mail.com])
         """
 
+        # Get best three recommendations from last week
         recommendations = Recommendation.objects.filter(
             user=user,
-            article__pubdate__lte=self.get_last_sunday()
+            article__pubdate__gte=self.get_last_sunday()
         ).select_related('article')[:3]
 
         # Don't send any mail if no recommendations were found
