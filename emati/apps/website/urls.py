@@ -8,6 +8,7 @@ urlpatterns = [
     path('terms/', views.TermsAndConditionsView.as_view(), name='terms_and_conditions'),
     path('terms/agree/', views.TermsAgreementView.as_view(), name='terms_agree'),
     path('about/', views.AboutView.as_view(), name='about'),
+    path('imprint/', views.ImprintView.as_view(), name='imprint'),
     path('search/', views.SearchView.as_view(), name='search'),
     path('settings/', views.SettingsView.as_view(), name='settings'),
 

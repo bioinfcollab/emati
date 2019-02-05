@@ -509,6 +509,16 @@ class AboutView(TemplateView):
 
         return context
 
+class ImprintView(TemplateView):
+    template_name = 'website/imrint.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(ImprintView, self).get_context_data(*args, **kwargs)
+        context['search_form'] = SearchForm(self.request.GET)
+
+        return context
+
+
 
 class ChangeEmailView(LoginRequiredMixin, TemplateView):
     template_name = 'website/change_email.html'
