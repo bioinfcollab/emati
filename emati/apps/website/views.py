@@ -351,6 +351,9 @@ class LoadMoreHome(LoadMoreMixin, HomePageView):
 class TermsAndConditionsView(TemplateView):
     template_name = 'website/termsandconditions.html'
 
+class PrivacyView(TemplateView):
+    template_name = 'website/privacy.html'
+
 
 class TermsAgreementView(LoginRequiredMixin, TemplateView):
     template_name = 'website/terms_agreement.html'

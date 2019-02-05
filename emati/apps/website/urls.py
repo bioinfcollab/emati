@@ -9,6 +9,7 @@ urlpatterns = [
     path('terms/agree/', views.TermsAgreementView.as_view(), name='terms_agree'),
     path('about/', views.AboutView.as_view(), name='about'),
     path('imprint/', views.ImprintView.as_view(), name='imprint'),
+    path('privacy/', views.PrivacyView.as_view(), name='privacy'),
     path('search/', views.SearchView.as_view(), name='search'),
     path('settings/', views.SettingsView.as_view(), name='settings'),
 
