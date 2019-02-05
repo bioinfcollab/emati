@@ -1,0 +1,24 @@
+{% extends "website/base.html" %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static '/website/css/about.css' %}" />
+{% endblock css %}
+
+{% block content %}
+<div class="content-box">
+    <h1>About Emati</h1>
+
+    <div class="back-link">
+        <a href="{% url 'welcome' %}">
+            <i class="fas fa-chevron-left"></i>Back
+        </a>
+    </div>
+
+    <p>
+    The <a href="http://www.biotec.tu-dresden.de/imprint.html" target="_blank"> Imprint of Biotec</a> applies with the following changes:
+    </p>
+    <p>Content responsible webmaster: Kurt Lachmann <Kurt.Lachmann(at)tu-dresden.de></p>
+    <p>Technical responsible webmaster: Alex Mestiashvili <alexandre.mestiashvili(at)tu-dresden.de></p>
+</div>
+{% endblock content %}
