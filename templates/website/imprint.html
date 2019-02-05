@@ -2,12 +2,12 @@
 {% load static %}
 
 {% block css %}
-<link rel="stylesheet" type="text/css" href="{% static '/website/css/about.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static '/website/css/imprint.css' %}" />
 {% endblock css %}
 
 {% block content %}
 <div class="content-box">
-    <h1>About Emati</h1>
+    <h1>Imprint</h1>
 
     <div class="back-link">
         <a href="{% url 'welcome' %}">
@@ -16,9 +16,15 @@
     </div>
 
     <p>
-    The <a href="http://www.biotec.tu-dresden.de/imprint.html" target="_blank"> Imprint of Biotec</a> applies with the following changes:
-    </p>
-    <p>Content responsible webmaster: Kurt Lachmann <Kurt.Lachmann(at)tu-dresden.de></p>
-    <p>Technical responsible webmaster: Alex Mestiashvili <alexandre.mestiashvili(at)tu-dresden.de></p>
+    The <a href="http://www.biotec.tu-dresden.de/imprint.html" target="_blank"> Imprint of Biotec</a> applies with the following changes:</p>
+    <p>Project developed by Michael Schroeder's group <a href="http://www.biotec.tu-dresden.de/research/schroeder/">[homepage]</a>
+    <p>Content responsible webmaster: Kurt Lachmann &lt;Kurt.Lachmann(at)tu-dresden.de&gt;</p>
+    <p>Technicaly responsible: Alex Mestiashvili &lt;alexandre.mestiashvili(at)tu-dresden.de&gt;</p>
+
+
+    <p>Emati is developed by TU Dresden (Germany). The project is the result of
+    combined efforts of Kurt Lachmann, Richard Kwasnicki, Joschka Heinrich,
+    Alexandre Mestiashvili and Michael Schroeder.</p>
+
 </div>
 {% endblock content %}
