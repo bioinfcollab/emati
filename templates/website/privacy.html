@@ -1,0 +1,18 @@
+{% extends "website/base.html" %}
+
+
+{% comment %}
+The complete list of terms and conditions.
+{% endcomment %}
+
+
+{% block content %}
+<div class="content-box">
+    {% with website_name='Emati' %}
+    {% with website_url='www.emati.biotec.tu-dresden.de' %}
+    <h1>Emati Terms and Conditions</h1>
+
+    {% endwith %}
+    {% endwith %}
+</div>    
+{% endblock content %}
