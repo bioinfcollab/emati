@@ -510,7 +510,7 @@ class AboutView(TemplateView):
         return context
 
 class ImprintView(TemplateView):
-    template_name = 'website/imrint.html'
+    template_name = 'website/imprint.html'
 
     def get_context_data(self, *args, **kwargs):
         context = super(ImprintView, self).get_context_data(*args, **kwargs)
