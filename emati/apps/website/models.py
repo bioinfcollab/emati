@@ -5,6 +5,7 @@ from sklearn.externals import joblib
 from django.db import models
 from django.db.utils import IntegrityError
 from django.db.models.signals import pre_delete
+from django.utils import timezone
 from django.conf import settings
 from django.dispatch import receiver
 from django.core.exceptions import ValidationError
@@ -30,6 +31,7 @@ class UserProfile(models.Model):
         default=0,
         verbose_name="number of interactions since last classifier retraining"
     )
+    last_visit = models.DateTimeField(default=timezone.now)
 
 
 

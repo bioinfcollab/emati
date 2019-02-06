@@ -1,4 +1,5 @@
 from django.shortcuts import redirect, reverse
+from django.utils import timezone
 from django.contrib import admin
 
 from website.views import TermsAgreementView
@@ -28,3 +29,17 @@ class TermsAgreementMiddleware:
                 return redirect('terms_agree')
 
         return None
+
+
+
+class SetLastVisitMiddleware:
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        if request.user.is_authenticated:
+            # Update last visit time after request finished processing.
+            request.user.profile.last_visit = timezone.now()
+            request.user.profile.save()
+        return self.get_response(request)

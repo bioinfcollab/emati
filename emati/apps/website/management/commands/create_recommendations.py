@@ -72,7 +72,7 @@ class Command(BaseCommand):
         if options['all_articles']:
             return Article.objects.all()
         elif options['unranked_articles']:
-            return Article.objects.exclude(recommendation__user=u.pk)
+            return Article.objects.exclude(recommendation__user=user.pk)
         elif options['last_week']:
             d = datetime.date.today() - datetime.timedelta(days=8)
             return Article.objects.filter(pubdate__gte=d)
