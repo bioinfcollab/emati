@@ -1,0 +1,50 @@
+{% extends "website/base.html" %}
+
+
+{% comment %}
+The complete list of terms and conditions.
+{% endcomment %}
+
+
+{% block content %}
+<div class="content-box">
+    {% with website_name='Emati' %}
+    {% with website_url='www.emati.biotec.tu-dresden.de' %}
+    <h1>Emati Privacy Policy</h1>
+    <p>Emati is a personalized service, which screens scientific articles to
+    recommend those, which match the user's interest.</p>
+
+    <p>To deliver and improve the service, Emati stores the following personal
+    information:
+    <ul>
+            <li>Basics subscriber information</li>
+            Name, email, link to social profile (Google and Facebook).
+            Facebook profile information (when you use Facebook to log-in to or to create an account on Emati)
+            Goole profile information (when you use Google to log-in to or to create an account on Emati)
+            This data is needed for the registration and notification purposes.
+
+            <li>Usage data</li>
+            Uploaded files, selected articles, time stamps, log in events needed
+            to maintain profile, profile aging, user specific search criteria.
+            Information derived from IP addresses such as country or institution
+            is used for internal purposes and will not be disclosed with third parties.
+            A user can delete his profile himself or request for it's deletion.
+            Profile deletion option is a part of web interface.
+
+            <li>Server log files</li>
+            IP addresses and urls are logged to maintain the availability and security of this site,
+            and to detect and correct errors in our IT systems. Log files will be deleted after 7 days.
+
+            <li>Cookies</li>
+            Emati is using cookies to maintain better user expirience. You can get more information
+            about cookies <a href="https://cookiesandyou.com/"> here</a>
+    </ul>
+
+    <li>Automatic account removal</li>
+    Accounts inactive for more than 6 month will be automatically deleted with all their data.
+
+    Further more the <a href="https://tu-dresden.de/impressum#ck_datenschutz">Data Protection Declaration</a> of the <a href="https://tu-dresden.de/">TU Dresden</a> applies.
+    {% endwith %}
+    {% endwith %}
+</div>
+{% endblock content %}

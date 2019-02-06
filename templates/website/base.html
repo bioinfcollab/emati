@@ -98,7 +98,10 @@ The base skeleton for HTML pages.
             <a href="{% url 'terms_and_conditions' %}">TERMS</a>
         </div>
         <div class="page-footer__box">
-            <a href="http://www.biotec.tu-dresden.de/imprint.html">IMPRINT</a>
+            <a href="{% url 'privacy' %}">PRIVACY</a>
+        </div>
+        <div class="page-footer__box">
+            <a href="{% url 'imprint' %}">IMPRINT</a>
         </div>
         <div class="page-footer__box">
             <a href="mailto:{{ contact_email }}">CONTACT</a>

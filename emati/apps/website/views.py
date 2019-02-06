@@ -351,6 +351,9 @@ class LoadMoreHome(LoadMoreMixin, HomePageView):
 class TermsAndConditionsView(TemplateView):
     template_name = 'website/termsandconditions.html'
 
+class PrivacyView(TemplateView):
+    template_name = 'website/privacy.html'
+
 
 class TermsAgreementView(LoginRequiredMixin, TemplateView):
     template_name = 'website/terms_agreement.html'
@@ -508,6 +511,16 @@ class AboutView(TemplateView):
         context['search_form'] = SearchForm(self.request.GET)
 
         return context
+
+class ImprintView(TemplateView):
+    template_name = 'website/imprint.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(ImprintView, self).get_context_data(*args, **kwargs)
+        context['search_form'] = SearchForm(self.request.GET)
+
+        return context
+
 
 
 class ChangeEmailView(LoginRequiredMixin, TemplateView):
