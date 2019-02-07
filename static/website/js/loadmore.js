@@ -31,6 +31,9 @@ function loadMore(event) {
             // Assign the function to this newly inserted button
             $("#load-more-button").click(loadMore);
             $("#load-more-button").show();
+
+            // Assign the like/dislike function to the new articles
+            attach_feedback_logging();
         },
         error: function(xhr, ajaxOptions, thrownError) {
             // Something went wrong. Log the error.
