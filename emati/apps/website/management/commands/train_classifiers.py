@@ -137,7 +137,8 @@ class Command(BaseCommand):
 
                         # Find the first where the title matches perfectly
                         if self._titles_match(a, aa):
-                            a = aa
+                            articles_in_file[i] = aa
+                            break
 
             all_articles += articles_in_file
         return all_articles
@@ -171,6 +172,13 @@ class Command(BaseCommand):
         logger.info('  {} clicks'.format(len(clicks)))
         uploaded = self._get_uploaded_articles(exhaustive)
         logger.info('  {} uploaded articles'.format(len(uploaded)))
+
+
+        for a in uploaded:
+            print(a.title)
+            print(a.abstract)
+            print('------------------------------------')
+
 
         # Ensure we have enough data to train with
         if len(likes) + len(dislikes) + len(clicks) + len(uploaded) <= 10:

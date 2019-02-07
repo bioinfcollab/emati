@@ -49,7 +49,7 @@ class Command(BaseCommand):
                 logger.info(
                     "Retraining classifier for user {} ...".format(u.pk)
                 )
-                call_command('train_classifiers', u.pk)
+                call_command('train_classifiers', u.pk, '--exhaustive')
                 u.profile.recent_interactions = 0
                 u.profile.save()
 
