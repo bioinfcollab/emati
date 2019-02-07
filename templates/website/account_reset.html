@@ -15,11 +15,12 @@
     <form method="POST" action="{% url 'account_reset' %}">
         {% csrf_token %}
         <p>Are you sure you want to reset your account?</p>
-        <p>This will:</p>
+        <p>This action will:</p>
         <ul>
             <li>delete all of your uploaded files</li>
             <li>delete your personal recommendation model</li>
             <li>remove all your likes and dislikes</li>
+            <li>remove all recommendations</li>
         </ul>
         <div class="button-container">
             <button type="submit" name="action">Reset account</button>

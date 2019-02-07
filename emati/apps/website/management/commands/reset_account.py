@@ -39,8 +39,8 @@ class Command(BaseCommand):
             self.delete_uploads(user)
             logger.info("  Deleting classifier ...")
             self.delete_classifier(user)
-            logger.info("  Resetting recommendations ...")
-            self.reset_recommendations(user)
+            logger.info("  Deleting recommendations ...")
+            self.delete_recommendations(user)
 
 
     def delete_uploads(self, user):
@@ -70,3 +70,8 @@ class Command(BaseCommand):
 
         # Bulk update (single trip to the database):
         modified_recommendations.update(liked=False, disliked=False, clicked=False)
+
+    
+    def delete_recommendations(self, user):
+        """Deletes all recommendations stored for this user."""
+        Recommendation.objects.filter(user=user).delete()
