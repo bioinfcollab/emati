@@ -173,13 +173,6 @@ class Command(BaseCommand):
         uploaded = self._get_uploaded_articles(exhaustive)
         logger.info('  {} uploaded articles'.format(len(uploaded)))
 
-
-        for a in uploaded:
-            print(a.title)
-            print(a.abstract)
-            print('------------------------------------')
-
-
         # Ensure we have enough data to train with
         if len(likes) + len(dislikes) + len(clicks) + len(uploaded) <= 10:
             logger.warning('ABORTING TRAINING. Not enough data for training.')
