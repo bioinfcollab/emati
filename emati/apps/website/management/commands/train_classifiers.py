@@ -107,8 +107,12 @@ class Command(BaseCommand):
         uploads = UserUpload.objects.filter(user=self.user)
         all_articles = []
         for u in uploads:
-            # Get all articles specified in this file
-            articles_in_file = self._parse_file(u)
+            try:
+                # Try to get all articles specified in this file
+                articles_in_file = self._parse_file(u)
+            except:
+                logger.error("Error while parsing file:", exc_info=True)
+                continue
 
             # Are we allowed to search for missing fields?
             if exhaustive:
