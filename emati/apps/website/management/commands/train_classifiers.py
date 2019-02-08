@@ -178,7 +178,7 @@ class Command(BaseCommand):
         logger.info('  {} uploaded articles'.format(len(uploaded)))
 
         # Ensure we have enough data to train with
-        if len(likes) + len(dislikes) + len(clicks) + len(uploaded) <= 10:
+        if len(likes) + len(dislikes) + len(clicks) + len(uploaded) < 10:
             logger.warning('ABORTING TRAINING. Not enough data for training.')
             return None
 
