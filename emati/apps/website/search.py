@@ -41,7 +41,7 @@ def fulltext_search(query_string, offset=0, max_results=10):
         query = {
             'query': {
                 'query_string': {
-                    'fields': ['title', 'abstract'],
+                    'fields': ['title', 'abstract', 'journal', 'authors_string'],
                     'query': query_string,
                     'default_operator': 'AND'
                 }
