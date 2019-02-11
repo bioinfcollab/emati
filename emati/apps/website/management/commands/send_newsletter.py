@@ -15,6 +15,11 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+# Recommendations must have at least this score to 
+# be included in the newsletter
+MINIMUM_SCORE = 0.7
+
+
 class Command(BaseCommand):
     help = 'Sends the newsletter to all subscribed users.'
 
@@ -53,6 +58,7 @@ class Command(BaseCommand):
         # Get best three recommendations from last week
         recommendations = Recommendation.objects.filter(
             user=user,
+            score__gte=MINIMUM_SCORE,
             article__pubdate__gte=self.get_last_sunday()
         ).select_related('article')[:3]
 

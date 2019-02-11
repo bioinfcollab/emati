@@ -40,8 +40,7 @@ $(document).ready(function() {
 
         // As soon as a file is picked ...
         new_file_input.change(function(e) {
-            settingsChanged();
-            
+
             file_name = e.target.files[0].name;
             file_size = e.target.files[0].size;
 
@@ -65,6 +64,8 @@ $(document).ready(function() {
                     // Add it to the list of files (which is part of the form)
                     new_file_label.append(new_file_input);
                     $("#upload-list__new-file").before(new_file_label);
+
+                    settingsChanged();
                 }
             });
         });
@@ -80,14 +81,13 @@ $(document).ready(function() {
     $(".upload-list__file__delete-button").click(deleteButtonClick);
     function deleteButtonClick(e) {
         e.preventDefault();
-        settingsChanged();
-
         var root = $(this).parents(".upload-list__file");        
 
         // If it's not yet uploaded we can simply delete 
         // the visual representation and stop here
         if (root.hasClass("to-be-uploaded")) {
             root.remove();
+            settingsChanged();
             return;
         }
 
@@ -110,6 +110,8 @@ $(document).ready(function() {
 
             icon.replaceWith('<i class="fas fa-file-excel"></i>');
         }
+
+        settingsChanged();
     }
 
 
@@ -119,8 +121,19 @@ $(document).ready(function() {
      * (Which are by default deactivated)
      */
     function settingsChanged() {
+        // Enable the "Save" and "Cancel" buttons
         $("#settings-buttons__save").removeAttr('disabled');
         $(".settings-buttons .button-disabled").removeClass("button-disabled");
+
+        // Show a help message if the user made any
+        // changes in the uploads area
+        num_new_files = $(".to-be-uploaded").length;
+        num_deleted_files = $(".to-be-deleted").length
+        if (num_new_files + num_deleted_files > 0) {
+            $(".upload-list__title__help-msg").css("display", "inline");
+        } else {
+            $(".upload-list__title__help-msg").hide()
+        }
     }
 
 });
