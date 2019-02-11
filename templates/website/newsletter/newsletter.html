@@ -5,8 +5,8 @@
 <p>here are your top-ranked articles from last week:</p>
 
 {% for recommendation in recommendations %}
-<p><a href="{{ recommendation.article.url_fulltext }}" ping="{% absolute_url 'log_click' recommendation.article.pk %}">{{ recommendation.article.title }}</a></p>
+<p>{{ recommendation.article.title }}</p>
 {% endfor %}
 
-<p>Check out <a href="{{ current_site.domain }}">{{ current_site.name }}</a> for more articles.<br>
+<p>Check out <a href="https://{{ current_site.domain }}">{{ current_site.name }}</a> to read more.<br>
 You can unsubscribe from this newsletter in your Emati settings.</p>
