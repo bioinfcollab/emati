@@ -37,6 +37,16 @@
     padding: 10px;
     border-bottom: 1px solid lightgray;
     background-color: #eef;
+    position: relative;
+}
+
+.upload-list__title__help-msg {
+    display: none;
+    font-size: 10px;
+    line-height: 16px;
+    color: #666;
+    position: absolute;
+    right: 10px;
 }
 
 #upload-list__content {
