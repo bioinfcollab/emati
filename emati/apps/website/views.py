@@ -6,6 +6,7 @@ import multiprocessing
 from collections import defaultdict
 from subprocess import Popen
 from ipware import get_client_ip
+from anonymizeip import anonymize_ip
 
 
 from django import db
@@ -792,10 +793,17 @@ def log_registration(request, user, **kwargs):
     # Get client ip
     client_ip, is_routable = get_client_ip(request)
 
+    # Anonymize the ip address
+    client_ip_anonym = anonymize_ip(
+        client_ip,
+        ipv4_mask="255.255.255.0", # anonymize the last block
+        ipv6_mask="ffff:ffff:ffff:ffff:0:0:0:0"
+    )
+
     # Get location for this ip
     lat = lon = None
-    if client_ip is not None and is_routable:
-        url = 'http://ip-api.com/json/' + client_ip
+    if client_ip_anonym is not None and is_routable:
+        url = 'http://ip-api.com/json/' + client_ip_anonym
         r = requests.get(url)
         if r.status_code == 200:
             response_content = json.loads(r.text)
