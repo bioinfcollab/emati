@@ -121,5 +121,4 @@ class Command(BaseCommand):
                 continue
 
             logger.info("Deleting user {} ({})".format(u.pk, u.email))
-            # TODO actually delete them
-            # u.delete()
+            u.delete()
