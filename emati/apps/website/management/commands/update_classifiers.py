@@ -16,12 +16,17 @@ class Command(BaseCommand):
     help = 'Retrains a classifier if enough new data samples are available.'
 
 
-    # Amount of new interactions required to trigger a retraining (percentage
-    # in relation to total interactions so far.
-    # Example: a user has clicked/liked/disliked 100 articles in total. A
-    # threshold of 0.1 means that 100*0.1 = 10 new interactions since the last
-    # training are needed to train the classifier anew.
-    RETRAINING_THRESHOLD = 0.1
+    # Amount of new interactions required to trigger a retraining. Use a
+    # combination of percentage and absolute interactions. Whatever case
+    # occurs first triggers the retraining.
+    #
+    # Percentage in relation to total interactions so far. Example: a user
+    # has clicked/liked/disliked 100 articles in total. A threshold of 0.1
+    # means that 100*0.1 = 10 new interactions since the last training are
+    # needed to train the classifier anew.
+    RETRAINING_THRESHOLD_PERCENT = 0.1
+    # Absolute number of new interactions required to trigger a retraining.
+    RETRAINING_THRESHOLD_ABSOLUTE = 10
 
 
     def add_arguments(self, parser):
@@ -60,16 +65,18 @@ class Command(BaseCommand):
     def _retraining_permitted(self, user):
         """Checks whether enough articles have been clicked/liked/disliked
         that the user has reached the threshold for retraining."""
-        # Number of recommendations the user interacted with
+        # Total number of recommendations the user interacted with
         total_interactions = Recommendation.objects.filter(user=user).filter(
             Q(clicked=True) | Q(liked=True) | Q(disliked=True)
         ).count()
 
-        # Prevent division by zero
-        total_interactions = max(total_interactions, 1)
+        # Use whichever threshold is lower
+        threshold = min(
+            self.RETRAINING_THRESHOLD_ABSOLUTE, 
+            self.RETRAINING_THRESHOLD_PERCENT * total_interactions
+        )
 
-        percent = user.profile.recent_interactions / total_interactions
-        return percent >= self.RETRAINING_THRESHOLD
+        return user.profile.recent_interactions >= threshold
 
 
     def _reclassify_interacted_articles(self, user):
