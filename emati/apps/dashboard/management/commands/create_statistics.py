@@ -89,8 +89,8 @@ class Command(BaseCommand):
 
         # Get a list of active users from the week before last
         users_weekbeforelast = UserLog.objects\
-            .filter(timestamp__gte=lastweek)\
-            .filter(timestamp__lte=weekbeforelast)\
+            .filter(timestamp__lte=lastweek)\
+            .filter(timestamp__gte=weekbeforelast)\
             .values_list('user', flat=True)\
             .distinct()
         
