@@ -235,7 +235,7 @@ class Command(BaseCommand):
             interpolate_strings = False,
             ignore_nonstandard_types = True,
         )
-        bib_database = parser.parse_file(file)
+        bib_database = parser.parse_file(file, partial=True)
 
         articles = []
         for entry in bib_database.entries:

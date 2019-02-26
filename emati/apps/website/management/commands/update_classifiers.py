@@ -13,7 +13,9 @@ logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
-    help = 'Retrains a classifier if enough new data samples are available.'
+    help = """Retrains a classifier if enough new data samples are 
+    available. By default updates all available users. A list of IDs can be 
+    supplied to work only on a subset of users - see parameter `user_ids`"""
 
 
     # Amount of new interactions required to trigger a retraining. Use a
@@ -30,7 +32,12 @@ class Command(BaseCommand):
 
 
     def add_arguments(self, parser):
-        parser.add_argument('user_ids', type=int, nargs='*', help="")
+        parser.add_argument(
+            'user_ids', 
+            type=int, 
+            nargs='*', 
+            help="""An optional list of user IDs. Updating will be limited 
+            to those users.""")
 
 
     def _get_user_list(self, **options):
