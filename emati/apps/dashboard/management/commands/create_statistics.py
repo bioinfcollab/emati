@@ -127,6 +127,7 @@ class Command(BaseCommand):
         """Returns the number of articles that were clicked 
         but neither liked nor disliked."""
         return Recommendation.objects\
+            .filter(timestamp__gte=after)\
             .filter(clicked=True)\
             .filter(liked=False)\
             .filter(disliked=False)\
@@ -137,6 +138,7 @@ class Command(BaseCommand):
         """Returns the number of recommendations that were 
         clicked AND liked after a given date."""
         return Recommendation.objects\
+            .filter(timestamp__gte=after)\
             .filter(clicked=True)\
             .filter(liked=True)\
             .count()
@@ -146,6 +148,7 @@ class Command(BaseCommand):
         """Returns the number of recommendations that were 
         clicked AND disliked after a given date."""
         return Recommendation.objects\
+            .filter(timestamp__gte=after)\
             .filter(clicked=True)\
             .filter(disliked=True)\
             .count()
