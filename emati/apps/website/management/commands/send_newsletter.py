@@ -1,4 +1,4 @@
-import datetime
+from datetime import date, timedelta
 
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
@@ -40,10 +40,10 @@ class Command(BaseCommand):
 
 
     def get_last_sunday(self):
-        """Returns the last monday as YYYY-MM-DD"""
-        today = datetime.date.today()
-        monday = today - datetime.timedelta(days=today.weekday())
-        sunday = monday - datetime.timedelta(days=1)
+        """Returns the last sunday as YYYY-MM-DD"""
+        today = date.today()
+        monday = today - timedelta(days=today.weekday())
+        sunday = monday - timedelta(days=1)
         return sunday.strftime('%Y-%m-%d')
 
     
@@ -59,7 +59,7 @@ class Command(BaseCommand):
         recommendations = Recommendation.objects.filter(
             user=user,
             score__gte=MINIMUM_SCORE,
-            article__pubdate__gte=self.get_last_sunday()
+            article__pubdate__gte=date.today() - timedelta(days=7)
         ).select_related('article')[:3]
 
         # Don't send any mail if no recommendations were found
