@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.contrib.auth.models import User
 from django.conf import settings
 
-from website.models import UserUpload, Classifier, Recommendation
+from website.models import UserUpload, Classifier, Recommendation, UserTextInput
 
 import logging
 logger = logging.getLogger(__name__)
@@ -37,6 +37,8 @@ class Command(BaseCommand):
             logger.info("Resetting user {} ...".format(uid))
             logger.info("  Deleting uploads ...")
             self.delete_uploads(user)
+            logger.info("  Deleting inputs ...")
+            self.delete_inputs(user)
             logger.info("  Deleting classifier ...")
             self.delete_classifier(user)
             logger.info("  Deleting recommendations ...")
@@ -47,6 +49,10 @@ class Command(BaseCommand):
         """Deletes all files uploaded by this user."""
         uploads = UserUpload.objects.filter(user=user)
         uploads.delete()
+
+    def delete_inputs(self, user):
+        txtInputs= UserTextInput.objects.filter(user=user)
+        txtInputs.delete()
 
     
     def delete_classifier(self, user):

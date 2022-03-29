@@ -60,7 +60,26 @@ class Pubmed(AbstractSource):
         """Same as a normal query but restricts the search to only titles."""
         query = query + '[TI]'
         return self.query(query, start_date, end_date, max_results)
-        
+
+    def query_pmid(self, pmid_list, start_date=None, end_date=None, max_results=10):
+
+        # Get a list of ids
+        idlist = pmid_list
+
+        # Shorten the list if desired
+        if max_results is not None:
+            idlist = idlist[:max_results]
+
+        # Get the actual content for these ids
+        records = self._fetch_papers(idlist)
+
+        # Convert Pubmed records to our Article format
+        articles = [self._format_article(r, start_date, end_date) for r in records]
+
+        # format_article() could have returned None for an unfitting record
+        articles = [a for a in articles if a is not None]
+
+        return articles
 
     def query(self, query, start_date=None, end_date=None, max_results=10):
         """Retrieve articles from Pubmed for a given query string and time span.
