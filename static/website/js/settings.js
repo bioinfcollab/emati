@@ -16,18 +16,7 @@ $(document).ready(function () {
     });
 
 
-    // ['11213123,12313123,143243424'] -> 11213123,12313123,143243424
-
     let tagsFromDb = $("#tagsFromDb").text();
-    // let tagList = []
-    // if (tagsFromDb != '') {
-    //     tagList = tagsFromDb.split(',').map(function (x) {
-    //         return parseInt(x, 10);
-    //     });
-    //     tagList = tagList.filter(function (el) {
-    //         return el != null;
-    //     });
-    // }
 
     $('#textbox_pmid').val(tagsFromDb);
 

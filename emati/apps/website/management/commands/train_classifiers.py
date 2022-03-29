@@ -150,7 +150,7 @@ class Command(BaseCommand):
             pmids_text = pmid_list.pmid_list.strip()
             query_pmids = re.split(',', pmids_text)
             try:
-                pmid_array = np.asarray(query_pmids, dtype=int)
+                np.asarray(query_pmids, dtype=int)
             except:
                 logger.error("PMIDs are not in correct format in the txt file.")
                 return []
@@ -238,13 +238,14 @@ class Command(BaseCommand):
         return []
 
     def _parse_txt(self, file):
+        max_pmid_length=10000
         pmids_text = file.read().strip()
         pmid_list = re.split('\n|,| |;|, |; ', pmids_text)
-        if len(pmid_list)>10000:
-            pmid_list=pmid_list[:10000]
-        pmid_clean_list = [pmid for pmid in pmid_list if pmid.isdigit()]
+        if len(pmid_list)>max_pmid_length:
+            pmid_list=pmid_list[:max_pmid_length]
+        pmid_list = [pmid for pmid in pmid_list if pmid.isdigit()]  # filter non-digit entries
         fetcher = Fetcher()
-        queried_articles = fetcher.query_pmid(pmid_clean_list, max_results=10000)
+        queried_articles = fetcher.query_pmid(pmid_list, max_results=max_pmid_length)
         return queried_articles
 
     def _parse_bibtex(self, file):
