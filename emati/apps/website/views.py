@@ -502,7 +502,10 @@ class SettingsView(LoginRequiredMixin, TemplateView):
 
     def has_valid_filesize(self, file):
         """Checks if a file is within the allowed maximum filesize."""
-        return file.size <= settings.WEBSITE_UPLOAD_MAX_FILESIZE
+        if file.name.endswith("txt"):
+            return file.size<= settings.WEBSITE_UPLOAD_MAX_TXT_FILESIZE
+        else:
+            return file.size <= settings.WEBSITE_UPLOAD_MAX_FILESIZE
 
     def has_user_reached_upload_limit(self, user):
         """Check if a user has uploaded the maximum amount of files."""

@@ -22,7 +22,7 @@ $(document).ready(function () {
 
     $('#textbox_pmid').inputTags({
         // tags: tagList,
-        max: 100,
+        max: 50,
         maxLength: 8,
         errors: {
             empty: 'Attention, you cannot add an empty tag.',

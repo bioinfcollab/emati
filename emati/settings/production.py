@@ -315,7 +315,7 @@ WEBSITE_UPLOAD_MAX_FILES = 10
 
 # The maximum size each uploaded file may be (in bytes)
 WEBSITE_UPLOAD_MAX_FILESIZE = 2*1024*1024
-
+WEBSITE_UPLOAD_MAX_TXT_FILESIZE = 20*1024
 # Supported filetypes. Everything not in this list will be ignored.
 #WEBSITE_UPLOAD_VALID_FILETYPES = ['.bib', '.ris', '.xml']
 WEBSITE_UPLOAD_VALID_FILETYPES = ['.bib', '.ris', '.xml','txt']
