@@ -22,7 +22,7 @@ class Fetcher:
             m, c = s.rsplit('.', 1)
 
             # Import module and instantiate class
-            module = importlib.import_module(m) 
+            module = importlib.import_module(m)
             class_ = getattr(module, c)
             instance = class_()
 
@@ -31,7 +31,7 @@ class Fetcher:
 
     def add_source(self, source):
         self.sources.append(source)
-        
+
 
     def download_last_day(self):
         """Loads yesterday's papers from all sources
@@ -39,42 +39,42 @@ class Fetcher:
         """
         self.download("", date.today(), date.today())
 
-    
+
     def download_last_week(self):
         """Loads last week's articles from all sources into our database."""
         last_week = date.today() - timedelta(days=7)
         self.download("", last_week, date.today())
-        
-    
+
+
     def download(self, query, start_date=None, end_date=None):
-        """Searches all sources for the given query string. Stores articles 
-        in the database. The searched time span can be limited via 
+        """Searches all sources for the given query string. Stores articles
+        in the database. The searched time span can be limited via
         `start_date` and `end_date`."""
         for s in self.sources:
             s.download(query, start_date, end_date)
 
-    
+
     def query(self, query, start_date=None, end_date=None, max_results=10):
         """Query all sources for a given query string."""
         articles = []
         for s in self.sources:
             articles += s.query(
-                query, 
-                start_date=start_date, 
-                end_date=end_date, 
+                query,
+                start_date=start_date,
+                end_date=end_date,
                 max_results=max_results
             )
         return articles
 
-    
+
     def query_title(self, query, start_date=None, end_date=None, max_results=10):
         """Query all sources for a query string but only look at titles."""
         articles = []
         for s in self.sources:
             articles += s.query_title(
-                query, 
-                start_date=start_date, 
-                end_date=end_date, 
+                query,
+                start_date=start_date,
+                end_date=end_date,
                 max_results=max_results
             )
         return articles

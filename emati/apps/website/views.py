@@ -42,7 +42,7 @@ logger = logging.getLogger(__name__)
 
 
 class WelcomePageView(TemplateView):
-    """The default page located at root url / 
+    """The default page located at root url /
     This is the first thing people see when visiting the website.
     """
     template_name = 'website/welcome.html'
@@ -66,7 +66,7 @@ class WeekBrowsingMixin():
     Requires that weeks are specified via the GET parameter 'w'.
     Weeks must be given in the format '2018w32'.
 
-    This class automatically adds the following values 
+    This class automatically adds the following values
     to the context dictionary:
     week_nr:           ISO number of requested week from 1 to 52 (or 53)
     week_range_pretty: e.g. '13 - 20 Aug 2018'
@@ -121,7 +121,7 @@ class WeekBrowsingMixin():
         fourth_jan = datetime.date(iso_year, 1, 4)
         _, fourth_jan_week, fourth_jan_day = fourth_jan.isocalendar()
         return fourth_jan + datetime.timedelta(days=iso_day-fourth_jan_day, weeks=iso_week-fourth_jan_week)
-        
+
 
     def get_week_range(self):
         """Returns the currently requested week as a tuple of strings
@@ -131,7 +131,7 @@ class WeekBrowsingMixin():
         d = self.iso_to_gregorian(self.year, self.week, 1)
         monday = d - datetime.timedelta(days=d.weekday())
         sunday = monday + datetime.timedelta(days=6)
-        
+
         # Change into string representations (YYYY-MM-DD)
         monday = monday.strftime('%Y-%m-%d')
         sunday = sunday.strftime('%Y-%m-%d')
@@ -148,7 +148,7 @@ class WeekBrowsingMixin():
         '13 - 19 Aug 2018'
         """
         monday, sunday = self.get_week_range()
-        
+
         # Convert into actual date objects
         monday = datetime.datetime.strptime(monday, '%Y-%m-%d').date()
         sunday = datetime.datetime.strptime(sunday, '%Y-%m-%d').date()
@@ -163,7 +163,7 @@ class WeekBrowsingMixin():
         else:
             # '13 - 19 Aug 2018'
             style = '{mon.day} - {sun.day} {sun:%b} {sun:%Y}'
-                    
+
         return style.format(mon=monday, sun=sunday)
 
 
@@ -174,7 +174,7 @@ class HomePageView(LoginRequiredMixin, WeekBrowsingMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(HomePageView, self).get_context_data(**kwargs)
-        
+
         start = self.offset
         end = self.offset + settings.WEBSITE_PAGINATE_BY
         recommendations = Recommendation.objects\
@@ -273,7 +273,7 @@ class SearchView(LoginRequiredMixin, TemplateView):
                 for the i-th article. If ommitted, scores will default to
                 0. If provided, the list must have exactly as many items
                 as there are provided articles.
-            
+
         Returns:
             a list of recommendations. Recommendations that were already
             present in the database have the correct values for metadata
@@ -297,7 +297,7 @@ class SearchView(LoginRequiredMixin, TemplateView):
 
         # Update with highlighted search results and new scores
         for r in recommendations:
-            # Do not overwrite r.article with an unsaved article. This 
+            # Do not overwrite r.article with an unsaved article. This
             # would make saving the recommendation impossible until the
             # article is saved to the DB first. Instead introduce a new
             # temporary field with our highlighted article which will never
@@ -307,12 +307,12 @@ class SearchView(LoginRequiredMixin, TemplateView):
 
         # Sort such that highest score comes first
         recommendations = sorted(
-            recommendations, 
-            key=lambda r: r.score, 
+            recommendations,
+            key=lambda r: r.score,
             reverse=True
         )
 
-        # Do not save them yet. This would lead to many new 
+        # Do not save them yet. This would lead to many new
         # recommendations for every new search.
 
         return recommendations
@@ -332,7 +332,7 @@ class LoadMoreMixin():
         except ValueError:
             # offset was not an integer
             return HttpResponse('Bad Request: the "offset" argument is not an integer.', status=400)
-    
+
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['hide_empty_message'] = True
@@ -341,7 +341,7 @@ class LoadMoreMixin():
 
 class LoadMoreHome(LoadMoreMixin, HomePageView):
     """The Ajax endpoint for requesting more content from the main page.
-    
+
     Displays the same data as the HomePageView but renders it directly
     to the HTML snippet without any headers or CSS. The returned block
     can then be inserted in the page via Javascript.
@@ -366,7 +366,7 @@ class TermsAgreementView(LoginRequiredMixin, TemplateView):
         else:
             # Do the usual rendering
             return super(TermsAgreementView, self).get(self, request, *args, **kwargs)
-    
+
 
     def post(self, request, *args, **kwargs):
         """Handles the form that was submitted when clicking on 'Continue' on
@@ -404,8 +404,8 @@ class SettingsView(LoginRequiredMixin, TemplateView):
 
 
     def update_content(self, userid):
-        """Meant to run in the background as a separate process. 
-        Called after a file was uploaded/deleted. Retrains the 
+        """Meant to run in the background as a separate process.
+        Called after a file was uploaded/deleted. Retrains the
         classifier and creates some recommendations."""
         management.call_command('train_classifiers', userid)
         management.call_command('create_recommendations', '--last-week', user_ids=[userid])
@@ -460,7 +460,7 @@ class SettingsView(LoginRequiredMixin, TemplateView):
             upload = UserUpload(user=request.user, file=f)
             upload.save()
             files_changed = True
-        
+
         # Retrain classifier if files were added or deleted
         if files_changed or textbox_changed:
 
@@ -471,7 +471,7 @@ class SettingsView(LoginRequiredMixin, TemplateView):
             # Start a subprocess and create some recommendations based on the
             # new training data that we now have.
             multiprocessing.Process(
-                target=self.update_content, 
+                target=self.update_content,
                 args=[request.user.pk]
             ).start()
 
@@ -485,14 +485,14 @@ class SettingsView(LoginRequiredMixin, TemplateView):
             profile.save()
         else:
             encountered_error = True
-        
+
         if not encountered_error:
             messages.success(request, "Successfully saved settings.")
 
         # Render the page as usual
         return self.get(request, *args, **kwargs)
 
-    
+
     def has_allowed_filetype(self, file):
         """Checks if a given file is in the list of allowed filetypes."""
         for t in settings.WEBSITE_UPLOAD_VALID_FILETYPES:
@@ -568,7 +568,7 @@ class ChangeEmailView(LoginRequiredMixin, TemplateView):
 
             # Change email
             new_email_address, _ = EmailAddress.objects.get_or_create(
-                user=request.user, 
+                user=request.user,
                 email=form.cleaned_data['new_email']
             )
             new_email_address.send_confirmation(request)
@@ -584,7 +584,7 @@ def change_email(request, email_address, **kwargs):
     and deletes all other addresses.
     This is called every time a new address was confirmed.
     """
-    try:       
+    try:
         # Get the user associated with this email
         user = email_address.user
 
@@ -623,7 +623,7 @@ class DeleteAccountView(LoginRequiredMixin, TemplateView):
             messages.error(request, 'Could not delete "{}". User does not exist'.format(request.user))
             return redirect('settings')
         return redirect('account_logout')
-        
+
 
 
 class ResetAccountView(LoginRequiredMixin, TemplateView):
@@ -661,14 +661,14 @@ def download_file(request):
     # Was a filename provided?
     if not file:
         return HttpResponse(status=404)
-        
+
     # Extract filename
     fname = os.path.basename(file)
 
     # Does the file actually exist?
     try:
         upload = UserUpload.objects.get(
-            user=request.user, 
+            user=request.user,
             file=file
         )
     except UserUpload.DoesNotExist:
@@ -685,7 +685,7 @@ def get_recommendation_or_new(user, article_id):
     If there is none then a new one will be created with a default score.
     The returned recommendation is not yet saved to the database. You have
     to call `save()` manually if that is what you desire.
-    If you need to call this function multiple times in a row use the batch 
+    If you need to call this function multiple times in a row use the batch
     version instead (`get_recommendations_or_new()`).
     """
     try:
@@ -708,7 +708,7 @@ def get_recommendations_or_new(user, article_ids):
     to call `save()` manually if that is what you desire.
     """
     recommendations = Recommendation.objects.filter(
-        user=user, 
+        user=user,
         article__pk__in=article_ids
     ).select_related('article')
 
@@ -748,8 +748,8 @@ def log_click(request, article_pk):
     r.save()
 
     UserLog.objects.create_log(
-        user=request.user, 
-        event=UserLog.Events.CLICK, 
+        user=request.user,
+        event=UserLog.Events.CLICK,
         context={"article_id": article_pk}
     )
 
@@ -762,8 +762,8 @@ def log_click(request, article_pk):
 @login_required
 @require_POST
 def log_like(request, article_pk):
-    """Stores a user's click on a like-button. 
-    Toggles the `liked` state of the respective article. 
+    """Stores a user's click on a like-button.
+    Toggles the `liked` state of the respective article.
     Called via ajax.
     """
     r = get_recommendation_or_new(request.user, article_pk)
@@ -772,8 +772,8 @@ def log_like(request, article_pk):
     r.save()
 
     UserLog.objects.create_log(
-        user=request.user, 
-        event=UserLog.Events.LIKE, 
+        user=request.user,
+        event=UserLog.Events.LIKE,
         context={"article_id": article_pk}
     )
 
@@ -786,8 +786,8 @@ def log_like(request, article_pk):
 @login_required
 @require_POST
 def log_dislike(request, article_pk):
-    """Stores a user's click on a dislike-button. 
-    Toggles the `disliked` state of the respective article. 
+    """Stores a user's click on a dislike-button.
+    Toggles the `disliked` state of the respective article.
     Called via ajax.
     """
     r = get_recommendation_or_new(request.user, article_pk)
@@ -796,8 +796,8 @@ def log_dislike(request, article_pk):
     r.save()
 
     UserLog.objects.create_log(
-        user=request.user, 
-        event=UserLog.Events.DISLIKE, 
+        user=request.user,
+        event=UserLog.Events.DISLIKE,
         context={"article_id": article_pk}
     )
 
@@ -830,11 +830,11 @@ def log_registration(request, user, **kwargs):
                 if 'lat' in response_content and 'lon' in response_content:
                     lat = response_content['lat']
                     lon = response_content['lon']
-            
+
     # Create a log event
     UserLog.objects.create_log(
-        user, 
-        UserLog.Events.REGISTRATION, 
+        user,
+        UserLog.Events.REGISTRATION,
         {'lat': lat, 'lon': lon}
     )
 

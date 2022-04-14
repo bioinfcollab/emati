@@ -49,7 +49,7 @@ class Pubmed(AbstractSource):
         if start_date is not None:
             # Append timespan to the query string
             query += ' AND ' + self._get_time_span(start_date, end_date) + '[PDAT]'
-        
+
         # Filter for articles that have links to full text and an abstract
         query += ' AND ("loattrfull text"[sb] AND hasabstract[text])'
 
@@ -84,7 +84,7 @@ class Pubmed(AbstractSource):
     def query(self, query, start_date=None, end_date=None, max_results=10):
         """Retrieve articles from Pubmed for a given query string and time span.
 
-        Omit the dates if you want to search in all papers. If only the 
+        Omit the dates if you want to search in all papers. If only the
         start_date is provided the end_date is set to the current day.
         Beware of queries with very large result sets since all results are
         loaded into memory. If you only want to load them into your database,
@@ -96,7 +96,7 @@ class Pubmed(AbstractSource):
 
         # Append the timespan and some necessary filters to the query
         query = self._compose_query(query, start_date, end_date)
-        
+
         # Get a list of ids
         idlist = self._fetch_ids(query)
 
@@ -145,7 +145,7 @@ class Pubmed(AbstractSource):
                         num_integrity_errors += 1
             logger.info("  {}/{}".format(min(end, len(idlist)), len(idlist)))
             start += self.batch_size
-        
+
         logger.info("Fetched {} new results.".format(num_new_results))
         if num_integrity_errors > 0:
             msg = "Could not save {} articles. ".format(num_integrity_errors)
@@ -168,7 +168,7 @@ class Pubmed(AbstractSource):
 
     def _extract_pubdate(self, record, start_date, end_date):
         """Extracts an article's date of publication.
-        
+
         start_date and end_date are required to check the validity of the
         retrieved time span. This ensures that the date of publication
         always lies within the queried time span.
@@ -185,7 +185,7 @@ class Pubmed(AbstractSource):
                 return date_dep
         except:
             # The record either didn't contain a DEP or
-            # the DEP was for some reason not within our queried timespan 
+            # the DEP was for some reason not within our queried timespan
             pass
 
         try:
@@ -226,7 +226,7 @@ class Pubmed(AbstractSource):
         # Alternative fields:
         # ['TA'] - journal abbreviation (E.g. 'Angew Chem Int Ed Engl')
         # ['AU'] - short author (last name + initials)
-        
+
         a = Article()
         try:
             a.title = record['TI']
@@ -247,7 +247,7 @@ class Pubmed(AbstractSource):
         """Returns the URL to this article's Pubmed page."""
         return 'http://www.ncbi.nlm.nih.gov/pubmed/' + str(record['PMID'])
 
-    
+
     def _get_fulltext_url(self, record):
         """Returns the URL to this article's fulltext.
 
@@ -269,13 +269,13 @@ class Pubmed(AbstractSource):
                 handle = Entrez.esearch(db="pubmed", term=query, retmax=100000000)
 
                 record = Entrez.read(handle)
-                
+
                 logger.info('Found {} PMIDs.'.format(len(record["IdList"])))
                 return record["IdList"]
             except:
                 logger.error(
                     "An error occured while fetching Pubmed IDs. " +
-                    "Trying again in {} seconds.".format(WAIT_SECONDS), 
+                    "Trying again in {} seconds.".format(WAIT_SECONDS),
                     exc_info=True
                 )
                 time.sleep(WAIT_SECONDS)
@@ -296,7 +296,7 @@ class Pubmed(AbstractSource):
                 try:
                     # Get the articles from pubmed
                     handle = Entrez.efetch(
-                        db="pubmed", id=pmid_list, rettype="medline", 
+                        db="pubmed", id=pmid_list, rettype="medline",
                         retmode="text", retstart=start, retmax=step_size
                     )
 
@@ -360,7 +360,7 @@ class Pubmed(AbstractSource):
                     else:
                         logger.warning("Trying again in {} seconds.".format(WAIT_SECONDS))
                         time.sleep(WAIT_SECONDS)
-            
+
             root = Entrez.read(handle)
             for r in root:
                 mylist = r["IdUrlList"]["IdUrlSet"]

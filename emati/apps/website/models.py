@@ -55,8 +55,8 @@ class UserTextInput(models.Model):
 
 class UserLogManager(models.Manager):
     def create_log(self, user, event, context={}, **kwargs):
-        """Creates a new log for the specified user and event. 
-        
+        """Creates a new log for the specified user and event.
+
         Context can either be supplied directly as a dictionary or specified
         implicitly via additional keyword arguments. These will overwrite any
         keys with the same name in the supplied dictionary.
@@ -79,9 +79,9 @@ class UserLog(models.Model):
     Supports a fixed set of events. Further details for each event are stored
     in a context dictionary. WARNING: if you need to change this dict, then
     only overwrite it with a new one. Do not assign values to a specific key,
-    as this will not change the underlying JSON representation. 
+    as this will not change the underlying JSON representation.
     E.g. Don't do this:
-        my_log.context_dict['article_id'] = 1234 
+        my_log.context_dict['article_id'] = 1234
     Instead do this:
         my_log.context_dict = {'article_id': 1234}
 
@@ -95,7 +95,7 @@ class UserLog(models.Model):
         DISLIKE = 'DISLIKE'
         SEARCH = 'SEARCH'
         REGISTRATION = 'REGISTRATION'
-    
+
     EVENT_CHOICES = [
         (Events.CLICK, 'Click'),
         (Events.LIKE, 'Like'),
@@ -141,10 +141,10 @@ class Article(models.Model):
         # characters. Hence we must ensure that article titles are less than
         # 255 characters.
 
-        # Cut off long titles and add some dots instead. 
+        # Cut off long titles and add some dots instead.
         if len(self.title) > 255:
             self.title = self.title[:251] + ' ...'
-            
+
         super(Article, self).save(*args, **kwargs)
 
     @property
@@ -192,7 +192,7 @@ class Classifier(models.Model):
     user = AutoOneToOneField(
         settings.AUTH_USER_MODEL,
         primary_key=True,
-        on_delete=models.CASCADE, 
+        on_delete=models.CASCADE,
         related_name='classifier',
     )
     path_clf = models.CharField(max_length=255)
@@ -223,7 +223,7 @@ class Classifier(models.Model):
             return None
 
     def get_path(self, filename):
-        """Returns the absolute path for a given file when it belongs 
+        """Returns the absolute path for a given file when it belongs
         to this classifier."""
         return os.path.join(
             settings.BASE_DIR,

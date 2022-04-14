@@ -52,11 +52,11 @@ The base skeleton for HTML pages.
     {% endblock header %}
 
     {% comment %}
-    Wrap it in an extra block in case somebody ever 
+    Wrap it in an extra block in case somebody ever
     wants to overwrite the default content-wrapper
     {% endcomment %}
     {% block body %}
-    
+
     {% if messages %}
         <div class="message-container">
 
@@ -64,7 +64,7 @@ The base skeleton for HTML pages.
                 <div class="message {{ message.tags }}">
                     <div class="message__icon">
                         {% if message.tags == 'message-debug' %}
-                            <i class="fas fa-code"></i>                        
+                            <i class="fas fa-code"></i>
                         {% elif message.tags == 'message-info' %}
                             <i class="fas fa-info"></i>
                         {% elif message.tags == 'message-success' %}

@@ -89,7 +89,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'templates'), 
+            os.path.join(BASE_DIR, 'templates'),
             os.path.join(BASE_DIR, 'templates', 'website'),
             os.path.join(BASE_DIR, 'templates', 'allauth'),
             os.path.join(BASE_DIR, 'templates', 'dashboard'),
@@ -175,7 +175,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
 
-# Absolute filesystem path to the directory that will hold 
+# Absolute filesystem path to the directory that will hold
 # user-uploaded files, classifiers
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 

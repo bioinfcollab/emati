@@ -30,7 +30,7 @@ class Command(BaseCommand):
                             help="""A list of user IDs for which to train a classifier."""
                             )
         parser.add_argument('--exhaustive', action='store_true',
-                            help="""Try to look up missing abstracts from all registered 
+                            help="""Try to look up missing abstracts from all registered
             sources. Training will take significantly longer."""
                             )
 
@@ -60,7 +60,7 @@ class Command(BaseCommand):
         """Returns a list of randomly picked articles.
 
         Args:
-            excluded_keys (list): Optional list of article IDs 
+            excluded_keys (list): Optional list of article IDs
                 that should not be picked.
         """
         # Get a list of keys that actually exist in the db
@@ -159,7 +159,7 @@ class Command(BaseCommand):
         return all_articles
 
     def _titles_match(self, x, y):
-        """Compares the titles of Articles x and y. Ignores case of 
+        """Compares the titles of Articles x and y. Ignores case of
         characters as well as all non-alphanumeric characters.
         """
         pattern = re.compile('[\W_]+')
@@ -212,13 +212,13 @@ class Command(BaseCommand):
             article_list = list(itertools.chain(likes, dislikes, clicks, typed))
             excluded_keys = [a.pk for a in article_list]
 
-            # Get a random set of articles and add them to the trainer. 
+            # Get a random set of articles and add them to the trainer.
             # Avoid randomly picking a previously added article.
             logger.info('  {} random articles as negatives'.format(nr_padding_negatives))
             random_articles = self._get_random_articles(nr_padding_negatives, excluded_keys)
             self._add_articles_to_trainer(trainer, random_articles, Targets.IRRELEVANT)
 
-        # Train the classifier 
+        # Train the classifier
         return trainer.train()
 
     def _parse_file(self, upload):
