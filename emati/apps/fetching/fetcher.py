@@ -79,8 +79,8 @@ class Fetcher:
             )
         return articles
 
-    def query_pmid(self, pmid_list, start_date=None, end_date=None, max_results=10):
-        """Query all sources for a given query string."""
+    def query_pmid(self, pmid_list, start_date=None, end_date=None, max_results=100):
+        """Query all sources for a given list of PMIDs."""
         articles = []
         for s in self.sources:
             try:

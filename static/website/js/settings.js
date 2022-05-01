@@ -26,11 +26,10 @@ $(document).ready(function () {
         maxLength: 8,
         errors: {
             empty: 'Attention, you cannot add an empty tag.',
-            minLength: 'Attention, votre tag doit avoir au minimum %s caractères.',
+            minLength: 'Attention, your tag must have at least %s characters.',
             maxLength: 'Attention, maximum length of a PMID can be %s.',
             max: 'Attention, maximum number of entries is %s.',
-            exists: 'Attention, ce tag existe déjà !',
-            autocomplete_only: 'Attention, vous devez sélectionner une valeur dans la liste.',
+            exists: 'Attention, this tag already exists !',
             timeout: 8000
         },
         init: function (elem) {
