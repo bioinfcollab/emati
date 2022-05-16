@@ -12,7 +12,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.core.files.base import ContentFile
 from annoying.fields import AutoOneToOneField
-
+import shutil
 
 import logging
 logger = logging.getLogger(__name__)
@@ -27,6 +27,7 @@ class UserProfile(models.Model):
     )
     newsletter = models.BooleanField(default=True)
     terms_consent = models.BooleanField(default=False)
+    default_classifier=models.BooleanField(default=True)
     recent_interactions = models.IntegerField(
         default=0,
         verbose_name="number of interactions since last classifier retraining"
@@ -264,9 +265,46 @@ class Classifier(models.Model):
         except OSError as e:
             logger.error(e)
 
-
 @receiver(pre_delete, sender=Classifier)
 def classifier_pre_delete(sender, instance, *args, **kwargs):
+    # NOTE: Using signals is better than overriding the `delete()` method.
+    # `delete()` is only called when explicitly deleting an instance; not when
+    # it's deleted as part of a cascade delete (`user.delete()`). This signal
+    # however is called in both cases.
+    instance.delete_files()
+
+class Bert_Classifier(models.Model):
+    """A machine learning model used for predicting scores.
+
+    Consists of a vectorizer and a classifier. The database only stores the
+    respective filenames and the associated user.
+    """
+    user = AutoOneToOneField(
+        settings.AUTH_USER_MODEL,
+        primary_key=True,
+        on_delete=models.CASCADE,
+        related_name='bert_classifier',
+    )
+    path_clf = models.CharField(max_length=255)
+
+
+    def is_initialized(self):
+        if not self.path_clf:
+            return False
+        return True
+
+
+    def delete_files(self):
+        logger.info("Deleting Bert classifier files (user {}) ...".format(self.user.pk))
+        try:
+            shutil.rmtree(self.path_clf)
+        except FileNotFoundError as e:
+            logger.error(e)
+
+
+
+@receiver(pre_delete, sender=Bert_Classifier)
+def bert_classifier_pre_delete(sender, instance, *args, **kwargs):
     # NOTE: Using signals is better than overriding the `delete()` method.
     # `delete()` is only called when explicitly deleting an instance; not when
     # it's deleted as part of a cascade delete (`user.delete()`). This signal

@@ -101,7 +101,12 @@ class SettingsForm(forms.Form):
         label='',
         required=False,
     )
-
+class ChangeClassifierForm(forms.Form):
+    """The form displayed on a user's change classifier page."""
+    transformer = forms.BooleanField(
+        label='',
+        required=False,
+    )
 
 class ChangeEmailForm(forms.Form):
     """Our own form for changing the primary email.

@@ -50,9 +50,14 @@ class Command(BaseCommand):
                 return
 
             # Save the trained classifier to the user
-            self.user.classifier.classifier = m.classifier
-            self.user.classifier.vectorizer = m.vectorizer
-            self.user.classifier.save()
+            if self.user.profile.default_classifier:
+                self.user.classifier.classifier = m.classifier
+                self.user.classifier.vectorizer = m.vectorizer
+                self.user.classifier.save()
+            else:
+                self.user.bert_classifier.path_clf=m
+                self.user.bert_classifier.save()
+
 
             logger.info('Finished training for user {}'.format(self.user.pk))
 
@@ -218,8 +223,10 @@ class Command(BaseCommand):
             random_articles = self._get_random_articles(nr_padding_negatives, excluded_keys)
             self._add_articles_to_trainer(trainer, random_articles, Targets.IRRELEVANT)
 
-        # Train the classifier 
-        return trainer.train()
+        # Train the classifier
+        if self.user.profile.default_classifier:
+            return trainer.train()
+        else: return trainer.train_BERT(self.user.pk)
 
     def _parse_file(self, upload):
         # Get the absolute path to the file

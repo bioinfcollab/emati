@@ -26,6 +26,8 @@ urlpatterns = [
     # Some custom account management pages
     path('accounts/delete', views.DeleteAccountView.as_view(), name='account_delete'),
     path('accounts/reset', views.ResetAccountView.as_view(), name='account_reset'),
+    path('accounts/change_classifier', views.ChangeClassifierView.as_view(), name='account_change_classifier'),
+
     
     path('download_file', views.download_file, name='download_file'),
     path('ajax/load_more/home/', views.LoadMoreHome.as_view(), name='load_more_home'),

@@ -31,7 +31,7 @@ from allauth.account.models import EmailAddress
 from allauth.account.signals import email_confirmed, user_signed_up
 
 
-from .forms import MyLoginForm, SearchForm, SettingsForm, ChangeEmailForm
+from .forms import MyLoginForm, SearchForm, SettingsForm, ChangeEmailForm, ChangeClassifierForm
 from .models import UserUpload,UserTextInput, UserLog, Article, Recommendation, Classifier
 from machinelearning.ranker import ArticleRanker
 from . import search
@@ -233,10 +233,12 @@ class SearchView(LoginRequiredMixin, TemplateView):
         )
 
         # Check if there is data to rank and the classifier is initialized
-        if articles and self.request.user.classifier.is_initialized():
-            ranker = ArticleRanker(self.request.user.classifier)
+        if articles and (self.request.user.classifier.is_initialized() or self.request.user.bert_classifier.is_initialized()):
+            if self.request.user.classifier.is_initialized():
+                ranker = ArticleRanker(self.request.user.classifier, default_classifier=True)
+            else:
+                ranker = ArticleRanker(self.request.user.bert_classifier, default_classifier=False)
             articles_with_scores = ranker.rank_articles(articles)
-
             # Limit results to the best ones
             articles_with_scores = articles_with_scores[:self.results_to_show]
 
@@ -385,6 +387,64 @@ class TermsAgreementView(LoginRequiredMixin, TemplateView):
             # This shouldn't happen but just in case something goes wrong
             # Reload the same page
             return redirect('terms_agree')
+
+class ChangeClassifierView(LoginRequiredMixin, TemplateView):
+    template_name = 'website/change_classifier.html'
+    def get_context_data(self, *args, **kwargs):
+        context = super(ChangeClassifierView, self).get_context_data(*args, **kwargs)
+        # Create a form and prepopulate it with the user's settings
+        up = self.request.user.profile
+        isDefaultClassifier = bool(up.default_classifier)
+        form = ChangeClassifierForm({'transformer': not(isDefaultClassifier)})
+        context['change_classifier_form'] = form
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        # Save all other settings
+        change_clf_form = ChangeClassifierForm(request.POST)
+        clf_changed=False
+        encountered_error = False
+        if change_clf_form.is_valid():
+            profile = request.user.profile
+            user_clf_choice = not(change_clf_form.cleaned_data['transformer'])
+            if  profile.default_classifier!=user_clf_choice:
+                clf_changed=True
+                profile.default_classifier = user_clf_choice
+                profile.save()
+        else:
+            encountered_error = True
+
+        if not encountered_error:
+            messages.success(request, "Successfully saved classifier selection.")
+            # Retrain classifier if files were added or deleted
+            if clf_changed:
+
+                # Close our database connection so that each process can generate
+                # a custom connection. Sharing one connection is not allowed.
+                db.connections.close_all()
+
+                # Start a subprocess and create some recommendations based on the
+                # new classifier that we now have.
+                multiprocessing.Process(
+                    target=self.change_classifier,
+                    args=[request.user.pk]
+                ).start()
+                #self.change_classifier(request.user.pk)
+
+                messages.info(request, "Your recommendations are being updated. This might take a minute.")
+
+        return redirect('settings')
+
+    def change_classifier(self, userid):
+        """Meant to run in the background as a separate process.
+        Called after the classifier was changed. Deletes existing classifiers
+        recommendations. Retrains the classifier and creates some recommendations."""
+
+        management.call_command('reset_account', userid, '--only_classifier',)
+        management.call_command('train_classifiers', userid)
+        management.call_command('create_recommendations', '--last-week', user_ids=[userid])
+
 
 
 class SettingsView(LoginRequiredMixin, TemplateView):

@@ -1,0 +1,40 @@
+{% extends "website/base.html" %}
+{% load static %}
+
+{% block css %}
+{{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static '/website/css/single_box.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static '/website/css/settings.css' %}"/>
+{% endblock css %}
+
+{% block searchbar %}{% endblock %}
+
+{% block content %}
+<div class="content-box">
+    <h1>Change your classifier</h1>
+
+    <form method="POST" action="{% url 'account_change_classifier' %}">
+        {% csrf_token %}
+        <div class="settings-item">
+            <div class="settings-item-checkbox">
+                {{ change_classifier_form.transformer }}
+                </div>
+            <div class="settings-item-label">
+                <div class="settings-item-label-title">Use a Transformer model as classifier </div>
+                <div class="settings-item-label-description"></div>
+            </div>
+        </div>
+        <p>Are you sure you want to use a Transformer model as classifier? Recommended for only large training sets. Please use default classifier for small training sets.</p>
+        <p>This action will:</p>
+        <ul>
+            <li>delete your existing classifier and all of your previous recommendations, then create new recommendations for only last week</li>
+            <li>require longer training and inference time</li>
+
+        </ul>
+        <div class="button-container">
+            <button type="submit" name="action">Change Classifier</button>
+            <a href="{% url 'settings' %}" class="button button-light">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock content %}

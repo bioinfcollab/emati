@@ -19,6 +19,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('user_ids', type=int, nargs='+', help="Specify which user(s) to reset")
+        parser.add_argument('--only_classifier', action='store_true')
 
 
     def handle(self, *args, **options):
@@ -33,12 +34,12 @@ class Command(BaseCommand):
             except User.DoesNotExist:
                 logger.warning("Skipping ID {}. No user was found.".format(uid))
                 continue
-            
-            logger.info("Resetting user {} ...".format(uid))
-            logger.info("  Deleting uploads ...")
-            self.delete_uploads(user)
-            logger.info("  Deleting inputs ...")
-            self.delete_inputs(user)
+            if not(options['only_classifier']):
+                logger.info("Resetting user {} ...".format(uid))
+                logger.info("  Deleting uploads ...")
+                self.delete_uploads(user)
+                logger.info("  Deleting inputs ...")
+                self.delete_inputs(user)
             logger.info("  Deleting classifier ...")
             self.delete_classifier(user)
             logger.info("  Deleting recommendations ...")
@@ -58,6 +59,7 @@ class Command(BaseCommand):
     def delete_classifier(self, user):
         """Deletes all classifiers associated with this user."""
         user.classifier.delete()
+        user.bert_classifier.delete()
 
 
     def reset_recommendations(self, user):

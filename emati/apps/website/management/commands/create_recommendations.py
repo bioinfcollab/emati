@@ -8,6 +8,13 @@ from machinelearning.ranker import ArticleRanker
 from machinelearning.utils import Targets
 from website.models import Article, Classifier, Recommendation
 
+from machinelearning.utils import Targets, prepare_article, get_path_Bert_classifier,Bert_Pretrained
+from transformers import BertTokenizer, BertForSequenceClassification
+# from transformers import Trainer
+# import torch
+# import torch.nn.functional as F
+# from django.conf import settings
+# import os
 
 import logging
 logger = logging.getLogger(__name__)
@@ -19,10 +26,10 @@ class Command(BaseCommand):
 
     # Predictions are calculated in batches
     BATCH_SIZE = 10000
-
+    BATCH_SIZE_BERT = 64
     # Create recommendations only for the best scores
     RECOMMENDATIONS_PER_BATCH = 100
-
+    MAX_BERT_RECOMMENDATIONS_PER_BATCH = 4
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -57,7 +64,6 @@ class Command(BaseCommand):
             action='store_true',
             help="""Ensures that existing recommendations are skipped and not recalculated.""")
 
-
     def _get_user_list(self, **options):
         """Returns the list of users we are supposed to work on."""
         if options['user_ids']:
@@ -65,7 +71,6 @@ class Command(BaseCommand):
         else:
             return User.objects.all()
             
-
     def _get_article_list(self, user, **options):
         """Returns the list of articles we are supposed to classify."""
         # ... determine which articles to work on
@@ -81,6 +86,13 @@ class Command(BaseCommand):
         else:
             return None
 
+    def add_articles_for_Bert(self, articles):
+        """Adds a list of articles as data samples for later ranking."""
+        data = []
+        for a in articles:
+            sample = prepare_article(a)
+            data.append(sample)
+        return data
 
     def handle(self, *args, **options):
         """The main entry point for this command."""
@@ -113,19 +125,22 @@ class Command(BaseCommand):
 
             logger.info("  {} articles to rank".format(articles.count()))
 
-            if not u.classifier.is_initialized():
-                logger.warning("Skipping user. Classifier not yet initialized.")
-                continue
-            
-            # Create a ranker using this user's classifier
-            ranker = ArticleRanker(u.classifier)
+            if u.profile.default_classifier:
+                if not u.classifier.is_initialized():
+                    logger.warning("Skipping user. Classifier not yet initialized.")
+                    continue
+                # Create a ranker using this user's classifier
+                ranker = ArticleRanker(u.classifier, default_classifier=u.profile.default_classifier)
 
-            # Calculate scores and create recommendations
-            self._rank_articles(u, ranker, articles)
+                # Calculate scores and create recommendations
+                self._rank_articles(u, ranker, articles)
+            else:
+                if not u.bert_classifier.is_initialized():
+                    logger.warning("Skipping user. Classifier not yet initialized.")
+                    continue
+                self._rank_articles_with_Bert(u, articles)
         
         logger.info("Finished creating recommendations")
-
-
 
     def _rank_articles(self, user_id, ranker, articles):
 
@@ -187,3 +202,72 @@ class Command(BaseCommand):
             start += self.BATCH_SIZE
             end = start + self.BATCH_SIZE
             batch_nr += 1
+
+    def _rank_articles_with_Bert(self, u, articles):
+        start = 0
+        end = start + self.BATCH_SIZE_BERT
+        num_articles = articles.count()
+        batch_nr = 1
+        model_name = Bert_Pretrained.MODEL_NAME
+        tokenizer = BertTokenizer.from_pretrained(model_name)
+        # Load trained model
+        path = get_path_Bert_classifier(u.pk)
+        try:
+            model = BertForSequenceClassification.from_pretrained(path, num_labels=2)
+        except sklearn.exceptions.NotFittedError:
+            logger.exception("Can't run the classifier, no model was supplied.", exc_info=True)
+            return
+
+        # Classify in batches
+        while start < num_articles:
+            logger.info("  batch {} ({}/{}):".format(
+                batch_nr,
+                min(end, num_articles),
+                num_articles)
+            )
+
+            # Prepare this batch
+            logger.info("  loading data ...")
+            article_batch = articles[start:end]
+            X_test = self.add_articles_for_Bert(article_batch)
+
+            X_test_tokenized = tokenizer(X_test, padding=True, truncation=True, max_length=300, return_tensors="pt")
+
+            # test_trainer = Trainer(model)
+            # raw_pred, _, _ = test_trainer.predict(test_dataset)
+
+            logger.info("  calculating scores ...")
+            outputs = model(**X_test_tokenized)
+            # get output probabilities by doing softmax
+            probs = outputs[0].softmax(1)
+
+            scores = [p[Targets.INTERESTING].item() for p in probs]
+            high_score_recommendations = len([x for x in scores if x >= 0.6])
+            articles_with_scores = zip(article_batch, scores)
+            articles_with_scores = sorted(
+                articles_with_scores,
+                key=lambda x: x[1],
+                reverse=True
+            )
+
+            recommendations_per_batch = high_score_recommendations
+            if self.MAX_BERT_RECOMMENDATIONS_PER_BATCH < high_score_recommendations:
+                recommendations_per_batch = self.MAX_BERT_RECOMMENDATIONS_PER_BATCH
+
+            best_articles = articles_with_scores[:recommendations_per_batch]
+
+            # Create recommendations with these scores
+            logger.info("  creating recommendations ...")
+            for (i, (article, score)) in enumerate(best_articles):
+                # Create a new or overwrite an existing recommendation
+                r, _ = Recommendation.objects.get_or_create(
+                    user=u,
+                    article=article
+                )
+                r.score = score
+                r.save()
+
+            start += self.BATCH_SIZE_BERT
+            end = start + self.BATCH_SIZE_BERT
+            batch_nr += 1
+

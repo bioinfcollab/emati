@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
-from .utils import Targets, prepare_article
-
+from .utils import Targets, prepare_article,Bert_Pretrained
+from transformers import BertTokenizer, BertForSequenceClassification
 
 class Ranker():
     """A general purpose ranker.
@@ -73,10 +73,42 @@ class Ranker():
         return self.get_predictions()[0]
 
 
+    def get_bert_predictions(self):
+        """Predict the class of a set of data samples.
+
+        Make sure you called  `add_data` before calculating the
+        prediction.
+
+        Returns: A list where each item is the probability for each respective
+            data item. The probabilities are in the same order as the respective
+            items were added using `add_data`. Each probability is a list itself
+            with as many items as the number of classes the model was trained
+            on. Each value represents the probability with which this data point
+            belongs to the resepctive class. E.g.: [[0.3, 0.7], [...], ...]
+            Means, the first sample belongs to class 0 with 30% and to class 1
+            with 70%.
+        """
+        if not self.model:
+            raise ValueError("Can't run the classifier, no model was supplied.")
+
+        if not self.data:
+            raise ValueError("Can't run the classifier, no data to predict.")
+
+        tokenizer = BertTokenizer.from_pretrained(Bert_Pretrained.MODEL_NAME)
+        # Load trained model
+        bert_model = BertForSequenceClassification.from_pretrained(self.model.path_clf, num_labels=2)
+        data_tokenized = tokenizer(self.data, padding=True, truncation=True, max_length=300, return_tensors="pt")
+        outputs = bert_model(**data_tokenized)
+        # get output probabilities by doing softmax
+        probs = outputs[0].softmax(1)
+        return probs
+
 class ArticleRanker(Ranker):
     """A ranker specifically designed to rank Articles.
     """
-
+    def __init__(self, model, default_classifier):
+        self.default_clf = default_classifier
+        super().__init__(model)
 
     def add_article(self, article):
         """Adds a single article as data sample for later ranking."""
@@ -100,8 +132,10 @@ class ArticleRanker(Ranker):
         highest score.
         """
         self.add_articles(articles)
-        predictions = self.get_predictions()
-
+        if self.default_clf:
+            predictions = self.get_predictions()
+        else:
+            predictions = self.get_bert_predictions()
         # Score is only the probability with which an article 
         # belongs to the "interesting"-class
         scores = [p[Targets.INTERESTING] for p in predictions]
