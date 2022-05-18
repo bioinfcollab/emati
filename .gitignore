@@ -8,8 +8,8 @@ __pycache__/
 *.sublime-*
 
 # Ignore the settings files
-/emati/settings/development.py
-/emati/settings/production.py
+emati/settings/development.py
+emati/settings/production.py
 
 # Ignore migration files
 /emati/apps/website/migrations/*
