@@ -32,7 +32,7 @@ from allauth.account.signals import email_confirmed, user_signed_up
 
 
 from .forms import MyLoginForm, SearchForm, SettingsForm, ChangeEmailForm
-from .models import UserUpload, UserLog, Article, Recommendation, Classifier
+from .models import UserUpload,UserTextInput, UserLog, Article, Recommendation, Classifier
 from machinelearning.ranker import ArticleRanker
 from . import search
 
@@ -394,7 +394,7 @@ class SettingsView(LoginRequiredMixin, TemplateView):
         context = super(SettingsView, self).get_context_data(*args, **kwargs)
         context['search_form'] = SearchForm(self.request.GET)
         context['uploaded_files'] = UserUpload.objects.filter(user=self.request.user)
-
+        context['text_input']= UserTextInput.objects.filter(user=self.request.user)
         # Create a form and prepopulate it with the user's settings
         up = self.request.user.profile
         form = SettingsForm({'newsletter': up.newsletter})
@@ -415,9 +415,25 @@ class SettingsView(LoginRequiredMixin, TemplateView):
         """Handles saving the user's settings."""
         new_files = request.FILES.getlist('newfile')
         remove_files = request.POST.getlist('removefile')
-
+        pmid_list = request.POST.getlist('pmid_textbox')
         files_changed = False
+        textbox_changed = False
         encountered_error = False
+
+        if (pmid_list):
+            pmids=pmid_list[0].strip()
+            try:
+                textInput = UserTextInput.objects.get(user=request.user)
+                if (pmids == ''):
+                    textInput.delete()
+                else:
+                    textInput.pmid_list = pmids
+                    textInput.save()
+            except UserTextInput.DoesNotExist:
+                textInput= UserTextInput(user=request.user, pmid_list=pmids)
+                textInput.save()
+
+            textbox_changed = True
 
         for f in remove_files:
             try:
@@ -446,7 +462,7 @@ class SettingsView(LoginRequiredMixin, TemplateView):
             files_changed = True
         
         # Retrain classifier if files were added or deleted
-        if files_changed:
+        if files_changed or textbox_changed:
 
             # Close our database connection so that each process can generate
             # a custom connection. Sharing one connection is not allowed.
@@ -486,7 +502,10 @@ class SettingsView(LoginRequiredMixin, TemplateView):
 
     def has_valid_filesize(self, file):
         """Checks if a file is within the allowed maximum filesize."""
-        return file.size <= settings.WEBSITE_UPLOAD_MAX_FILESIZE
+        if file.name.endswith("txt"):
+            return file.size<= settings.WEBSITE_UPLOAD_MAX_TXT_FILESIZE
+        else:
+            return file.size <= settings.WEBSITE_UPLOAD_MAX_FILESIZE
 
     def has_user_reached_upload_limit(self, user):
         """Check if a user has uploaded the maximum amount of files."""

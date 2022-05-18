@@ -8,10 +8,17 @@ __pycache__/
 *.sublime-*
 
 # Ignore the settings files
-/emati/settings/*.py
+emati/settings/development.py
+emati/settings/production.py
+
+# Ignore migration files
+/emati/apps/website/migrations/*
 
 # Ignore user classifiers and uploads
 /media/
 
 # Ignore log files
 /logs/
+
+# Ignore Macos folder
+.DS_Store

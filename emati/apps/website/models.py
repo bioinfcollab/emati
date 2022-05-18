@@ -1,7 +1,6 @@
 import os
 import json
 from sklearn.externals import joblib
-
 from django.db import models
 from django.db.utils import IntegrityError
 from django.db.models.signals import pre_delete
@@ -44,6 +43,13 @@ class UserUpload(models.Model):
     file = models.FileField(upload_to=user_directory_path)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='uploads')
 
+class UserTextInput(models.Model):
+    # pmid_list = models.ListTextField(
+    #     base_field=models.IntegerField(),
+    #     size=1000,  # Maximum of 100 ids in list
+    # )
+    pmid_list= models.TextField(max_length=10000)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
 
 class UserLogManager(models.Manager):

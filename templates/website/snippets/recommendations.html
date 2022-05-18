@@ -45,8 +45,8 @@
     {% if not hide_empty_message %}
         <p>Nothing here.</p>
         {% if not classifier_initialized %}
-            <p>We don't know your interests yet. You can upload a BibTex
-            (.bib) file in your <a href="{% url 'settings' %}">settings</a> to
+            <p>We don't know your interests yet. You can upload your references as a BibTex
+            (.bib), RIS (.ris) or Endnote (.xml) file, or you can upload a list of PubMed IDs of the articles in a Text file (.txt) in your <a href="{% url 'settings' %}">settings</a> to
             kickstart your recommendation model.</p>
         {% endif %}
     {% endif %}

@@ -13,6 +13,7 @@ The base skeleton for HTML pages.
     <link rel="stylesheet" type="text/css" href="{% static '/website/css/base.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static '/website/css/searchbar.css' %}" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static '/website/css/inputTags.min.css' %}" />
     {% block css %}
     {% endblock css %}
 
@@ -21,6 +22,7 @@ The base skeleton for HTML pages.
     <script src="{% static 'website/js/ajax_setup.js' %}"></script>
     <script src="{% static 'website/js/messages.js' %}"></script>
     <script src="{% static 'website/js/searchbar.js' %}"></script>
+    <script src="{% static 'website/js/inputTags.jquery.min.js' %}"></script>
     {% include 'website/snippets/cookie_consent.html' %}
     {% block script %}
     {% endblock script %}
