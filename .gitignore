@@ -10,6 +10,9 @@ __pycache__/
 # Ignore the settings files
 /emati/settings/*.py
 
+# Ignore migration files
+/emati/apps/website/migrations/*
+
 # Ignore user classifiers and uploads
 /media/
 
