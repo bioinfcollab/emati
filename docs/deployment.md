@@ -2,7 +2,7 @@ This document describes how to deploy this project to a live production environm
 
 
 # Project Setup
-Clone the project from https://projects.biotec.tu-dresden.de/redmine/projects/emati-de/.
+Clone the project from https://github.com/bioinfcollab/emati.git.
 
 Install all dependencies listed in the `requirements.txt` which is located at the project root directory:
 ```
