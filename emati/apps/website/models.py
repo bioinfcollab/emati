@@ -1,7 +1,6 @@
 import os
 import json
 from sklearn.externals import joblib
-#from django_mysql.models import ListCharField
 from django.db import models
 from django.db.utils import IntegrityError
 from django.db.models.signals import pre_delete
