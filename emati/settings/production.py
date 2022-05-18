@@ -317,7 +317,6 @@ WEBSITE_UPLOAD_MAX_FILES = 10
 WEBSITE_UPLOAD_MAX_FILESIZE = 2*1024*1024
 WEBSITE_UPLOAD_MAX_TXT_FILESIZE = 20*1024
 # Supported filetypes. Everything not in this list will be ignored.
-#WEBSITE_UPLOAD_VALID_FILETYPES = ['.bib', '.ris', '.xml']
 WEBSITE_UPLOAD_VALID_FILETYPES = ['.bib', '.ris', '.xml','txt']
 
 # Mail address displayed on the "Contact" page
@@ -342,7 +341,7 @@ WEBSITE_SEARCH_INDEX = 'article'
 # search request, which are then ranked using the user's classifier
 WEBSITE_SEARCH_MAX_RESULTS = 3000
 
-DASHBOARD_PROJECT_REPOSITORY = 'https://projects.biotec.tu-dresden.de/redmine/projects/emati-de/'
+DASHBOARD_PROJECT_REPOSITORY = 'https://github.com/bioinfcollab/emati'
 
 #--------------------------------------------------------
 # Logging
